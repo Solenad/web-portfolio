@@ -1,6 +1,6 @@
 # Web Portfolio
 
-A retro-inspired web portfolio built with Next.js, featuring a Windows 95-style desktop interface. Projects, about sections, and content are organized as desktop icons, with layered draggable windows providing an immersive, nostalgic user experience.
+A retro-inspired web portfolio built with Next.js, featuring a Windows XP-style desktop interface. Projects, about sections, and content are organized as desktop icons, with layered draggable windows providing an immersive, nostalgic user experience.
 
 ## Concept
 
@@ -11,7 +11,7 @@ This portfolio reimagines the traditional web experience through the lens of a c
 - **Layered Window Management** with z-index handling for focused interaction
 - **Start Menu & Taskbar** for quick access and window management
 
-The Windows 95 aesthetic serves as a creative framework for presenting technical work—every "application" is a piece of content, every window is a story.
+The Windows XP Luna aesthetic serves as a creative framework for presenting technical work-every "application" is a piece of content, every window is a story.
 
 ## Technology Stack
 
@@ -29,7 +29,7 @@ The Windows 95 aesthetic serves as a creative framework for presenting technical
 - **TypeScript Strict Mode**: Zero `any` policy with explicit return types
 - **Tailwind CSS v4**: New configuration syntax with CSS-first approach
 - **Geist Fonts**: Sans and Mono font families pre-configured
-- **Dark Mode Support**: CSS media query-based theming
+- **XP Luna Theme**: Blue gradients, rounded corners, and XP-style controls
 
 ## Getting Started
 
@@ -94,40 +94,56 @@ The application follows a component-based architecture centered around the deskt
 
 ```
 Desktop (app/page.tsx)
-├── DesktopIcons          # Grid of clickable icons
-├── WindowManager         # Renders active windows
-│   └── Window[]          # Draggable, layered windows
-│       ├── TitleBar      # Drag handle & controls
-│       └── Content       # Window content area
-└── Taskbar               # Bottom bar with Start menu
-    ├── StartButton       # Opens Start menu
-    ├── StartMenu         # Application launcher
-    └── TaskbarItems      # Open window buttons
+├── Wallpaper             # Bliss wallpaper with blue fallback
+├── IconGrid              # Top-left icon grid (96x96 cells)
+│   └── DesktopIcon[]     # Clickable icons with placeholders
+└── Taskbar               # Bottom taskbar (30px)
+    ├── StartButton       # Start trigger (placeholder action)
+    └── SystemTray        # Live clock display
 ```
 
-State management handles:
-- **Window State**: Position, size, z-index, minimize/maximize
-- **Desktop State**: Active window, open applications
-- **Drag State**: Mouse position, dragging state
+### Desktop usage
+
+```tsx
+import Desktop from "@/components/desktop/Desktop";
+
+export default function Home() {
+  return <Desktop />;
+}
+```
+
+### Windows XP palette
+
+These CSS variables are defined in `app/globals.css` and used by Tailwind utility classes:
+
+- `--winxp-blue`: `#235CDB`
+- `--winxp-blue-dark`: `#1A3D8C`
+- `--winxp-blue-light`: `#4A90E2`
+- `--winxp-green`: `#4A7C2A`
+- `--winxp-gray`: `#ECE9D8`
+- `--winxp-gray-border`: `#ACA899`
+- `--winxp-white`: `#FFFFFF`
+- `--winxp-black`: `#000000`
+- `--wallpaper-base`: `#4A90E2`
 
 ## Development Roadmap
 
 ### Phase 1: Foundation
-- [ ] Desktop container with wallpaper
-- [ ] Desktop icon grid system
+- [x] Desktop container with wallpaper
+- [x] Desktop icon grid system
 - [ ] Icon click handling (double-click to open)
 
 ### Phase 2: Window System
-- [ ] Window component with 95-style chrome
+- [ ] Window component with XP-style chrome
 - [ ] Draggable windows (title bar drag)
 - [ ] Window controls (minimize, maximize, close)
 - [ ] Z-index management (focus on click)
 
 ### Phase 3: Taskbar
-- [ ] Bottom taskbar container
-- [ ] Start button with menu
+- [x] Bottom taskbar container
+- [x] Start button with menu
 - [ ] Taskbar items for open windows
-- [ ] System tray with clock
+- [x] System tray with clock
 
 ### Phase 4: Content Integration
 - [ ] Project viewer window

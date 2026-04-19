@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+:root {
+  --background: #4a90e2;
+  --foreground: #000000;
+  --wallpaper-base: #4a90e2;
+  --taskbar-height: 2c8px;
+
+  --winxp-blue: #235cdb;
+  --winxp-blue-dark: #1a3d8c;
+  --winxp-blue-light: #4a90e2;
+  --winxp-green: #4a7c2a;
+  --winxp-gray: #ece9d8;
+  --winxp-gray-border: #aca899;
+  --winxp-white: #ffffff;
+  --winxp-black: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-winxp: Tahoma, "Trebuchet MS", Verdana, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-winxp);
+  font-size: 11px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.winxp-raised {
+  border: 1px solid var(--winxp-gray-border);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 1px 0 rgba(0, 0, 0, 0.2);
+}
+
+.winxp-inset {
+  border: 1px solid #2452b8;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.winxp-icon-label {
+  color: var(--winxp-white);
+  font-size: 12px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.winxp-button {
+  color: var(--winxp-white);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.winxp-button:hover {
+  filter: brightness(1.05);
+}
+
+.winxp-button:active {
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.35);
+}
+
+.winxp-icon-selected {
+  border-radius: 4px;
+  background-color: rgba(30, 80, 160, 0.4);
+}
+
+.winxp-icon-hover {
+  border-radius: 4px;
+}
+
+.winxp-icon-hover:hover:not(.winxp-icon-selected) {
+  background-color: rgba(49, 106, 197, 0.25);
+}
