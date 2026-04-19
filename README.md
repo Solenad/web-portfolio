@@ -1,4 +1,9 @@
 #  windows-xp-web-portfolio
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+![GitHub last commit](https://img.shields.io/github/last-commit/Solenad/web-portfolio)
+![visitors](https://visitor-badge.laobi.icu/badge?page_id=Solenad.web-portfolio.id)
+
+
 A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop interface. Built with modern web technologies while capturing the nostalgic essence of the classic operating system.
 
 <img width="1918" height="943" alt="Webpage" src="https://github.com/user-attachments/assets/e58b1735-6b6c-400d-aaff-feb195548800" />
@@ -162,10 +167,6 @@ Instead of traditional page navigation, this portfolio uses the Windows XP deskt
 - **Double-click** (future) will open content in draggable windows
 
 This creates an immersive, nostalgic experience that stands out from conventional portfolio designs.
-
-## 📸 Screenshots
-
-*Add screenshots of your portfolio here*
 
 ## 🤝 Contributing
 
