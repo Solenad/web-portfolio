@@ -37,7 +37,7 @@ export default function DesktopIcon({
       type="button"
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
-      className={`flex w-[104px] flex-col items-center gap-1.5 p-1 text-[11px] focus:outline-none ${isSelected ? "winxp-icon-selected" : "bg-transparent"
+      className={`flex w-[104px] flex-col items-center gap-1.5 p-1 text-[13px] focus:outline-none ${isSelected ? "winxp-icon-selected" : "bg-transparent"
         }`}
       aria-label={label}
     >
@@ -52,7 +52,7 @@ export default function DesktopIcon({
             onError={() => setImageFailed(true)}
           />
         ) : (
-          <span className="winxp-icon flex h-[72px] w-[72px] items-center justify-center rounded-[4px] bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[12px] font-bold text-white">
+          <span className="winxp-icon flex h-[72px] w-[72px] items-center justify-center rounded-[4px] bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[12px] text-white">
             {iconName.slice(0, 3).toUpperCase()}
           </span>
         )}

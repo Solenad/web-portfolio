@@ -53,7 +53,7 @@ export default function SystemTray({ showClock = true }: Props): JSX.Element {
         height={16}
         className="h-4 w-4"
       />
-      <span className="ml-1 font-semibold tracking-wide [font-family:Tahoma,'Trebuchet_MS',Verdana,sans-serif] [text-shadow:0_1px_1px_rgba(0,0,0,0.5)]">
+      <span className="ml-1 tracking-wide [font-family:Tahoma,'Trebuchet_MS',Verdana,sans-serif] [text-shadow:0_1px_1px_rgba(0,0,0,0.5)]">
         {showClock ? clock : null}
       </span>
     </div>

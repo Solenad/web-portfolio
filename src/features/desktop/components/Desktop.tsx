@@ -15,7 +15,7 @@ const DESKTOP_ICONS: DesktopIconItem[] = [
     id: "about",
     label: "About Me",
     iconName: "about",
-    iconPath: "/assets/xp-icons/about-me.png",
+    iconPath: "/assets/xp-icons/user.webp",
   },
   {
     id: "projects",
