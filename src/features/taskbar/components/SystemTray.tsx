@@ -28,7 +28,7 @@ export default function SystemTray({ showClock = true }: Props): JSX.Element {
 
   return (
     <div
-      className="flex h-[28px] min-w-[110px] items-center gap-1.5 rounded-[2px] px-2 text-[11px] text-white"
+      className="flex h-[26px] min-w-[110px] items-center gap-1.5 rounded-[2px] px-2 text-[11px] text-white"
       style={{
         background:
           "linear-gradient(to bottom, rgb(108, 171, 244) 0%, rgb(88, 153, 234) 45%, rgb(74, 138, 227) 100%)",
