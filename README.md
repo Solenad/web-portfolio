@@ -1,6 +1,6 @@
 # Web Portfolio
 
-A retro-inspired web portfolio built with Next.js, featuring a Windows 95-style desktop interface. Projects, about sections, and content are organized as desktop icons, with layered draggable windows providing an immersive, nostalgic user experience.
+A retro-inspired web portfolio built with Next.js, featuring a Windows 98-style desktop interface. Projects, about sections, and content are organized as desktop icons, with layered draggable windows providing an immersive, nostalgic user experience.
 
 ## Concept
 
@@ -11,7 +11,7 @@ This portfolio reimagines the traditional web experience through the lens of a c
 - **Layered Window Management** with z-index handling for focused interaction
 - **Start Menu & Taskbar** for quick access and window management
 
-The Windows 95 aesthetic serves as a creative framework for presenting technical work—every "application" is a piece of content, every window is a story.
+The Windows 98 aesthetic serves as a creative framework for presenting technical work—every "application" is a piece of content, every window is a story.
 
 ## Technology Stack
 
@@ -94,27 +94,42 @@ The application follows a component-based architecture centered around the deskt
 
 ```
 Desktop (app/page.tsx)
-├── DesktopIcons          # Grid of clickable icons
-├── WindowManager         # Renders active windows
-│   └── Window[]          # Draggable, layered windows
-│       ├── TitleBar      # Drag handle & controls
-│       └── Content       # Window content area
-└── Taskbar               # Bottom bar with Start menu
-    ├── StartButton       # Opens Start menu
-    ├── StartMenu         # Application launcher
-    └── TaskbarItems      # Open window buttons
+├── Wallpaper             # Teal Windows 98 gradient background
+├── IconGrid              # Top-left icon grid (80x80 cells)
+│   └── DesktopIcon[]     # Clickable icons with placeholders
+└── Taskbar               # Bottom taskbar (28px)
+    ├── StartButton       # Start trigger (placeholder action)
+    └── SystemTray        # Live clock display
 ```
 
-State management handles:
-- **Window State**: Position, size, z-index, minimize/maximize
-- **Desktop State**: Active window, open applications
-- **Drag State**: Mouse position, dragging state
+### Desktop usage
+
+```tsx
+import Desktop from "@/components/desktop/Desktop";
+
+export default function Home() {
+  return <Desktop />;
+}
+```
+
+### Windows 98 palette
+
+These CSS variables are defined in `app/globals.css` and used by Tailwind utility classes:
+
+- `--win98-teal`: `#008080`
+- `--win98-gray`: `#c0c0c0`
+- `--win98-dark-gray`: `#808080`
+- `--win98-light-gray`: `#dfdfdf`
+- `--win98-white`: `#ffffff`
+- `--win98-black`: `#000000`
+- `--wallpaper-base`: `#008080`
+- `--wallpaper-gradient`: `linear-gradient(135deg, #008080 0%, #009090 55%, #007070 100%)`
 
 ## Development Roadmap
 
 ### Phase 1: Foundation
-- [ ] Desktop container with wallpaper
-- [ ] Desktop icon grid system
+- [x] Desktop container with wallpaper
+- [x] Desktop icon grid system
 - [ ] Icon click handling (double-click to open)
 
 ### Phase 2: Window System
@@ -124,10 +139,10 @@ State management handles:
 - [ ] Z-index management (focus on click)
 
 ### Phase 3: Taskbar
-- [ ] Bottom taskbar container
-- [ ] Start button with menu
+- [x] Bottom taskbar container
+- [x] Start button with menu
 - [ ] Taskbar items for open windows
-- [ ] System tray with clock
+- [x] System tray with clock
 
 ### Phase 4: Content Integration
 - [ ] Project viewer window
