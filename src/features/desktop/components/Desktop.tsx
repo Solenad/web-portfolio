@@ -32,6 +32,7 @@ const DESKTOP_ICONS: DesktopIconItem[] = [
 ];
 
 export default function Desktop(): JSX.Element {
+  const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
   const [viewportWidth, setViewportWidth] = useState<number>(() => {
     if (typeof window === "undefined") {
       return MOBILE_BREAKPOINT;
@@ -69,8 +70,15 @@ export default function Desktop(): JSX.Element {
           </p>
         </main>
       ) : (
-        <main className="relative z-10 h-[calc(100dvh-var(--taskbar-height))] overflow-hidden">
-          <IconGrid icons={DESKTOP_ICONS} />
+        <main
+          className="relative z-10 h-[calc(100dvh-var(--taskbar-height))] overflow-hidden"
+          onClick={() => setSelectedIconId(null)}
+        >
+          <IconGrid
+            icons={DESKTOP_ICONS}
+            selectedId={selectedIconId}
+            onSelectIcon={(iconId) => setSelectedIconId(iconId)}
+          />
         </main>
       )}
       <Taskbar

@@ -8,21 +8,24 @@ interface Props {
   label: string;
   iconName: string;
   iconPath?: string;
+  isSelected: boolean;
+  onSelect: () => void;
   onOpen?: () => void;
+  windowId?: string;
+  windowType?: string;
 }
 
 export default function DesktopIcon({
   label,
   iconName,
   iconPath,
+  isSelected,
+  onSelect,
   onOpen,
+  windowId,
+  windowType,
 }: Props): JSX.Element {
-  const [isSelected, setIsSelected] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
-
-  const handleClick = (): void => {
-    setIsSelected(true);
-  };
 
   const handleDoubleClick = (): void => {
     if (onOpen) {
@@ -35,11 +38,15 @@ export default function DesktopIcon({
   return (
     <button
       type="button"
-      onClick={handleClick}
+      onClick={(event) => {
+        event.stopPropagation();
+        onSelect();
+      }}
       onDoubleClick={handleDoubleClick}
-      className={`flex w-[104px] flex-col items-center gap-1.5 p-1 text-[13px] focus:outline-none ${isSelected ? "winxp-icon-selected" : "bg-transparent"
-        }`}
+      className={`winxp-icon-hover flex w-[104px] flex-col items-center gap-1.5 p-1 text-[13px] focus:outline-none ${isSelected ? "winxp-icon-selected" : "bg-transparent"}`}
       aria-label={label}
+      data-window-id={windowId}
+      data-window-type={windowType}
     >
       <span className="relative flex h-[72px] w-[72px] items-center justify-center">
         {hasImage ? (
@@ -48,11 +55,11 @@ export default function DesktopIcon({
             alt={`${label} icon`}
             width={72}
             height={72}
-            className="winxp-icon h-[72px] w-[72px]"
+            className=" h-[72px] w-[72px]"
             onError={() => setImageFailed(true)}
           />
         ) : (
-          <span className="winxp-icon flex h-[72px] w-[72px] items-center justify-center rounded-[4px] bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[12px] text-white">
+          <span className=" flex h-[72px] w-[72px] items-center justify-center rounded-[4px] bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[12px] text-white">
             {iconName.slice(0, 3).toUpperCase()}
           </span>
         )}
