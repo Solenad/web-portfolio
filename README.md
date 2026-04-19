@@ -1,8 +1,7 @@
-# Rohann Dizon - Windows XP Portfolio
-
+#  windows-xp-web-portfolio
 A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop interface. Built with modern web technologies while capturing the nostalgic essence of the classic operating system.
 
-![Portfolio Preview](/public/assets/wallpapers/bliss.jpg)
+<img width="1918" height="943" alt="Webpage" src="https://github.com/user-attachments/assets/e58b1735-6b6c-400d-aaff-feb195548800" />
 
 ## ✨ Features
 
