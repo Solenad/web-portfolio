@@ -13,7 +13,7 @@ RUN npm run build
 FROM base AS runner
 ENV NODE_ENV=production
 
-RUN addgroup -g 1000 -S nodejs && adduser -S nextjs -u 1000
+RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
