@@ -1,8 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #008080;
+  --foreground: #000000;
+  --wallpaper-base: #008080;
+  --wallpaper-gradient: linear-gradient(135deg, #008080 0%, #009090 55%, #007070 100%);
+  --taskbar-height: 28px;
+
+  --win98-teal: #008080;
+  --win98-gray: #c0c0c0;
+  --win98-dark-gray: #808080;
+  --win98-light-gray: #dfdfdf;
+  --win98-white: #ffffff;
+  --win98-black: #000000;
 }
 
 @theme inline {
@@ -10,17 +20,35 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-win98: "MS Sans Serif", Tahoma, Geneva, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-win98);
+  font-size: 11px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.win98-raised {
+  border: 2px solid;
+  border-color: var(--win98-white) var(--win98-black) var(--win98-black)
+    var(--win98-white);
+}
+
+.win98-inset {
+  border: 2px solid;
+  border-color: var(--win98-dark-gray) var(--win98-light-gray)
+    var(--win98-light-gray) var(--win98-dark-gray);
+}
+
+.win98-icon-label {
+  color: var(--win98-white);
+  text-shadow:
+    -1px 0 var(--win98-black),
+    0 1px var(--win98-black),
+    1px 0 var(--win98-black),
+    0 -1px var(--win98-black);
 }
