@@ -37,28 +37,27 @@ export default function DesktopIcon({
       type="button"
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
-      className={`flex w-[96px] flex-col items-center gap-1 p-1 text-[11px] focus:outline-none ${
-        isSelected ? "winxp-icon-selected" : "bg-transparent"
-      }`}
+      className={`flex w-[104px] flex-col items-center gap-1.5 p-1 text-[11px] focus:outline-none ${isSelected ? "winxp-icon-selected" : "bg-transparent"
+        }`}
       aria-label={label}
     >
-      <span className="relative flex h-12 w-12 items-center justify-center">
+      <span className="relative flex h-[72px] w-[72px] items-center justify-center">
         {hasImage ? (
           <Image
             src={iconPath ?? ""}
             alt={`${label} icon`}
-            width={48}
-            height={48}
-            className="winxp-icon h-12 w-12"
+            width={72}
+            height={72}
+            className="winxp-icon h-[72px] w-[72px]"
             onError={() => setImageFailed(true)}
           />
         ) : (
-          <span className="winxp-icon flex h-12 w-12 items-center justify-center bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[10px] font-bold text-white">
+          <span className="winxp-icon flex h-[72px] w-[72px] items-center justify-center rounded-[4px] bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[12px] font-bold text-white">
             {iconName.slice(0, 3).toUpperCase()}
           </span>
         )}
       </span>
-      <span className="winxp-icon-label line-clamp-2 text-center leading-[1.1] break-words">
+      <span className="winxp-icon-label w-[72px] line-clamp-2 text-center leading-[1.15] break-words [font-family:Tahoma,'Trebuchet_MS',Verdana,sans-serif]">
         {label}
       </span>
     </button>

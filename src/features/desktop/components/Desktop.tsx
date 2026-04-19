@@ -27,7 +27,7 @@ const DESKTOP_ICONS: DesktopIconItem[] = [
     id: "contact",
     label: "Contact",
     iconName: "contact",
-    iconPath: "/assets/xp-icons/contact.png",
+    iconPath: "/assets/xp-icons/mail.webp",
   },
 ];
 
