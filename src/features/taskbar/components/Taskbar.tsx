@@ -2,8 +2,8 @@
 
 import type { JSX } from "react";
 
-import StartButton from "@/components/taskbar/StartButton";
-import SystemTray from "@/components/taskbar/SystemTray";
+import StartButton from "@/features/taskbar/components/StartButton";
+import SystemTray from "@/features/taskbar/components/SystemTray";
 
 interface Props {
   onStartClick: () => void;

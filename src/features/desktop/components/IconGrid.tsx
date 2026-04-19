@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-import DesktopIcon from "@/components/icons/DesktopIcon";
+import DesktopIcon from "@/features/desktop/components/DesktopIcon";
 import type { DesktopIconItem } from "@/types/desktop.types";
 
 interface Props {

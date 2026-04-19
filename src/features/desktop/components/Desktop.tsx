@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { JSX } from "react";
 
-import IconGrid from "@/components/desktop/IconGrid";
-import Wallpaper from "@/components/desktop/Wallpaper";
-import Taskbar from "@/components/taskbar/Taskbar";
+import IconGrid from "@/features/desktop/components/IconGrid";
+import Wallpaper from "@/features/desktop/components/Wallpaper";
+import Taskbar from "@/features/taskbar/components/Taskbar";
 import type { DesktopIconItem } from "@/types/desktop.types";
 
 const MOBILE_BREAKPOINT = 768;
