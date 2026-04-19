@@ -1,6 +1,6 @@
 # Web Portfolio
 
-A retro-inspired web portfolio built with Next.js, featuring a Windows 98-style desktop interface. Projects, about sections, and content are organized as desktop icons, with layered draggable windows providing an immersive, nostalgic user experience.
+A retro-inspired web portfolio built with Next.js, featuring a Windows XP-style desktop interface. Projects, about sections, and content are organized as desktop icons, with layered draggable windows providing an immersive, nostalgic user experience.
 
 ## Concept
 
@@ -11,7 +11,7 @@ This portfolio reimagines the traditional web experience through the lens of a c
 - **Layered Window Management** with z-index handling for focused interaction
 - **Start Menu & Taskbar** for quick access and window management
 
-The Windows 98 aesthetic serves as a creative framework for presenting technical work—every "application" is a piece of content, every window is a story.
+The Windows XP Luna aesthetic serves as a creative framework for presenting technical work-every "application" is a piece of content, every window is a story.
 
 ## Technology Stack
 
@@ -29,7 +29,7 @@ The Windows 98 aesthetic serves as a creative framework for presenting technical
 - **TypeScript Strict Mode**: Zero `any` policy with explicit return types
 - **Tailwind CSS v4**: New configuration syntax with CSS-first approach
 - **Geist Fonts**: Sans and Mono font families pre-configured
-- **Dark Mode Support**: CSS media query-based theming
+- **XP Luna Theme**: Blue gradients, rounded corners, and XP-style controls
 
 ## Getting Started
 
@@ -94,10 +94,10 @@ The application follows a component-based architecture centered around the deskt
 
 ```
 Desktop (app/page.tsx)
-├── Wallpaper             # Teal Windows 98 gradient background
-├── IconGrid              # Top-left icon grid (80x80 cells)
+├── Wallpaper             # Bliss wallpaper with blue fallback
+├── IconGrid              # Top-left icon grid (96x96 cells)
 │   └── DesktopIcon[]     # Clickable icons with placeholders
-└── Taskbar               # Bottom taskbar (28px)
+└── Taskbar               # Bottom taskbar (30px)
     ├── StartButton       # Start trigger (placeholder action)
     └── SystemTray        # Live clock display
 ```
@@ -112,18 +112,19 @@ export default function Home() {
 }
 ```
 
-### Windows 98 palette
+### Windows XP palette
 
 These CSS variables are defined in `app/globals.css` and used by Tailwind utility classes:
 
-- `--win98-teal`: `#008080`
-- `--win98-gray`: `#c0c0c0`
-- `--win98-dark-gray`: `#808080`
-- `--win98-light-gray`: `#dfdfdf`
-- `--win98-white`: `#ffffff`
-- `--win98-black`: `#000000`
-- `--wallpaper-base`: `#008080`
-- `--wallpaper-gradient`: `linear-gradient(135deg, #008080 0%, #009090 55%, #007070 100%)`
+- `--winxp-blue`: `#235CDB`
+- `--winxp-blue-dark`: `#1A3D8C`
+- `--winxp-blue-light`: `#4A90E2`
+- `--winxp-green`: `#4A7C2A`
+- `--winxp-gray`: `#ECE9D8`
+- `--winxp-gray-border`: `#ACA899`
+- `--winxp-white`: `#FFFFFF`
+- `--winxp-black`: `#000000`
+- `--wallpaper-base`: `#4A90E2`
 
 ## Development Roadmap
 
@@ -133,7 +134,7 @@ These CSS variables are defined in `app/globals.css` and used by Tailwind utilit
 - [ ] Icon click handling (double-click to open)
 
 ### Phase 2: Window System
-- [ ] Window component with 95-style chrome
+- [ ] Window component with XP-style chrome
 - [ ] Draggable windows (title bar drag)
 - [ ] Window controls (minimize, maximize, close)
 - [ ] Z-index management (focus on click)

@@ -26,8 +26,10 @@ export default function SystemTray({ showClock = true }: Props): JSX.Element {
   }, []);
 
   return (
-    <div className="win98-inset flex h-[22px] min-w-[78px] items-center justify-center bg-[#c0c0c0] px-2 text-[11px] text-black">
-      {showClock ? clock : null}
+    <div className="flex h-[22px] min-w-[78px] items-center justify-center rounded border border-[#1a3d8c] bg-[#1a3d8c] px-2 text-[11px] text-white shadow-inner">
+      <span className="font-semibold tracking-wide drop-shadow-sm">
+        {showClock ? clock : null}
+      </span>
     </div>
   );
 }

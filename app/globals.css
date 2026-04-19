@@ -1,18 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  --background: #008080;
+  --background: #4a90e2;
   --foreground: #000000;
-  --wallpaper-base: #008080;
-  --wallpaper-gradient: linear-gradient(135deg, #008080 0%, #009090 55%, #007070 100%);
-  --taskbar-height: 28px;
+  --wallpaper-base: #4a90e2;
+  --taskbar-height: 30px;
 
-  --win98-teal: #008080;
-  --win98-gray: #c0c0c0;
-  --win98-dark-gray: #808080;
-  --win98-light-gray: #dfdfdf;
-  --win98-white: #ffffff;
-  --win98-black: #000000;
+  --winxp-blue: #235cdb;
+  --winxp-blue-dark: #1a3d8c;
+  --winxp-blue-light: #4a90e2;
+  --winxp-green: #4a7c2a;
+  --winxp-gray: #ece9d8;
+  --winxp-gray-border: #aca899;
+  --winxp-white: #ffffff;
+  --winxp-black: #000000;
 }
 
 @theme inline {
@@ -20,35 +21,70 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-win98: "MS Sans Serif", Tahoma, Geneva, sans-serif;
+  --font-winxp: Tahoma, "Trebuchet MS", Verdana, sans-serif;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-win98);
+  font-family: var(--font-winxp);
   font-size: 11px;
   line-height: 1.2;
   margin: 0;
 }
 
-.win98-raised {
-  border: 2px solid;
-  border-color: var(--win98-white) var(--win98-black) var(--win98-black)
-    var(--win98-white);
+.winxp-raised {
+  border: 1px solid var(--winxp-gray-border);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
-.win98-inset {
-  border: 2px solid;
-  border-color: var(--win98-dark-gray) var(--win98-light-gray)
-    var(--win98-light-gray) var(--win98-dark-gray);
+.winxp-inset {
+  border: 1px solid #2452b8;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 
-.win98-icon-label {
-  color: var(--win98-white);
+.winxp-icon-label {
+  color: var(--winxp-white);
   text-shadow:
-    -1px 0 var(--win98-black),
-    0 1px var(--win98-black),
-    1px 0 var(--win98-black),
-    0 -1px var(--win98-black);
+    -1px 0 var(--winxp-black),
+    0 1px var(--winxp-black),
+    1px 0 var(--winxp-black),
+    0 -1px var(--winxp-black);
+}
+
+.winxp-button {
+  border: 1px solid #2f5fbf;
+  border-radius: 6px;
+  color: var(--winxp-white);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.winxp-button:hover {
+  filter: brightness(1.05);
+}
+
+.winxp-button:active {
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* XP Glossy Icon Styling */
+.winxp-icon {
+  border-radius: 2px;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.winxp-icon-selected {
+  background: linear-gradient(135deg, rgba(35, 92, 219, 0.9) 0%, rgba(26, 61, 140, 0.85) 100%);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.3);
 }

@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-A retro-inspired web portfolio featuring a Windows 98-style desktop interface. Rather than conventional page navigation, users interact with desktop icons, draggable windows, and a taskbar—transforming the portfolio into an immersive, nostalgic experience.
+A retro-inspired web portfolio featuring a Windows XP-style desktop interface. Rather than conventional page navigation, users interact with desktop icons, draggable windows, and a taskbar-transforming the portfolio into an immersive, nostalgic experience.
 
 **Key Technologies:**
 - **Next.js**: 16.2.4 (App Router)
@@ -170,34 +170,40 @@ Use these path aliases instead of relative paths (`../../../`):
 
 ### Tailwind CSS v4 Classes
 
-**Windows 98 Styling:**
+**Windows XP Styling:**
 
-The project uses a Windows 98 color palette defined in CSS custom properties:
+The project uses a Windows XP Luna color palette defined in CSS custom properties:
 
 ```css
 :root {
-  --win98-teal: #008080;
-  --win98-gray: #c0c0c0;
-  --win98-dark-gray: #808080;
-  --win98-light-gray: #dfdfdf;
-  --win98-white: #ffffff;
-  --win98-black: #000000;
+  --winxp-blue: #235cdb;
+  --winxp-blue-dark: #1a3d8c;
+  --winxp-blue-light: #4a90e2;
+  --winxp-green: #4a7c2a;
+  --winxp-gray: #ece9d8;
+  --winxp-gray-border: #aca899;
+  --winxp-white: #ffffff;
+  --winxp-black: #000000;
 }
 ```
 
 **Utility Classes:**
 
 ```css
-/* Raised border effect (Windows 98 style) */
-.win98-raised {
-  border: 2px solid;
-  border-color: var(--win98-white) var(--win98-black) var(--win98-black) var(--win98-white);
+/* Raised border effect (Windows XP style) */
+.winxp-raised {
+  border: 1px solid var(--winxp-gray-border);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 /* Inset/sunken border effect */
-.win98-inset {
-  border: 2px solid;
-  border-color: var(--win98-dark-gray) var(--win98-light-gray) var(--win98-light-gray) var(--win98-dark-gray);
+.winxp-inset {
+  border: 1px solid #2452b8;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.25);
 }
 ```
 

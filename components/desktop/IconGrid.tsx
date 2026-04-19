@@ -9,7 +9,7 @@ interface Props {
 
 export default function IconGrid({ icons }: Props): JSX.Element {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,80px)] justify-start gap-y-0 p-5 [grid-auto-rows:80px] [column-gap:0] [row-gap:0]">
+    <div className="grid grid-cols-[repeat(auto-fill,96px)] justify-start gap-y-0 p-5 [grid-auto-rows:96px] [column-gap:0] [row-gap:0]">
       {icons.map((icon) => (
         <DesktopIcon
           key={icon.id}

@@ -18,6 +18,7 @@ export default function DesktopIcon({
   onOpen,
 }: Props): JSX.Element {
   const [isSelected, setIsSelected] = useState(false);
+  const [imageFailed, setImageFailed] = useState(false);
 
   const handleClick = (): void => {
     setIsSelected(true);
@@ -29,34 +30,35 @@ export default function DesktopIcon({
     }
   };
 
-  const hasImage = Boolean(iconPath);
+  const hasImage = Boolean(iconPath) && !imageFailed;
 
   return (
     <button
       type="button"
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
-      className={`flex w-[80px] flex-col items-center gap-1 p-1 text-[11px] focus:outline-none ${
-        isSelected ? "bg-[#000080]/35" : "bg-transparent"
+      className={`flex w-[96px] flex-col items-center gap-1 p-1 text-[11px] focus:outline-none ${
+        isSelected ? "winxp-icon-selected" : "bg-transparent"
       }`}
       aria-label={label}
     >
-      <span className="relative flex h-8 w-8 items-center justify-center">
+      <span className="relative flex h-12 w-12 items-center justify-center">
         {hasImage ? (
           <Image
             src={iconPath ?? ""}
             alt={`${label} icon`}
-            width={32}
-            height={32}
-            className="h-8 w-8"
+            width={48}
+            height={48}
+            className="winxp-icon h-12 w-12"
+            onError={() => setImageFailed(true)}
           />
         ) : (
-          <span className="win98-raised flex h-8 w-8 items-center justify-center bg-[#c0c0c0] text-[8px] font-bold text-black">
+          <span className="winxp-icon flex h-12 w-12 items-center justify-center bg-gradient-to-b from-[#6ea9ff] to-[#235cdb] text-[10px] font-bold text-white">
             {iconName.slice(0, 3).toUpperCase()}
           </span>
         )}
       </span>
-      <span className="win98-icon-label line-clamp-2 text-center leading-[1.1] break-words">
+      <span className="winxp-icon-label line-clamp-2 text-center leading-[1.1] break-words">
         {label}
       </span>
     </button>

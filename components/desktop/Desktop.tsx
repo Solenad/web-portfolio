@@ -15,19 +15,19 @@ const DESKTOP_ICONS: DesktopIconItem[] = [
     id: "about",
     label: "About Me",
     iconName: "about",
-    iconPath: "/assets/about-me.png",
+    iconPath: "/assets/xp-icons/about-me.png",
   },
   {
     id: "projects",
     label: "Projects",
     iconName: "projects",
-    iconPath: "/assets/projects.png",
+    iconPath: "/assets/xp-icons/projects.png",
   },
   {
     id: "contact",
     label: "Contact",
     iconName: "contact",
-    iconPath: "/assets/contact.png",
+    iconPath: "/assets/xp-icons/contact.png",
   },
 ];
 
@@ -52,16 +52,19 @@ export default function Desktop(): JSX.Element {
     };
   }, []);
 
-  const isMobile = useMemo(() => viewportWidth < MOBILE_BREAKPOINT, [viewportWidth]);
+  const isMobile = useMemo(
+    () => viewportWidth < MOBILE_BREAKPOINT,
+    [viewportWidth],
+  );
 
   return (
     <div className="relative h-dvh w-full overflow-hidden text-[11px]">
-      <Wallpaper showPattern={false} />
+      <Wallpaper imagePath="/assets/wallpapers/bliss.jpg" />
       {isMobile ? (
         <main className="relative z-10 flex h-[calc(100dvh-var(--taskbar-height))] flex-col items-start gap-3 overflow-y-auto p-4 text-white">
-          <h1 className="win98-icon-label text-base">Rohann Dizon Portfolio</h1>
+          <h1 className="winxp-icon-label text-base">Rohann Dizon Portfolio</h1>
           <p className="max-w-sm text-[11px] leading-relaxed">
-            Mobile fallback is active. Open on desktop for the full Windows 98
+            Mobile fallback is active. Open on desktop for the full Windows XP
             experience.
           </p>
         </main>
