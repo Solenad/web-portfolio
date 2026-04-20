@@ -22,10 +22,14 @@ A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop in
 - **Wallpaper Click** - Click on empty desktop to deselect all icons
 - **Hover States** - Translucent blue highlight (no borders/shadows)
 - **Selected States** - Darker translucent blue background
+- **Window Manager** - Single-instance windows with focus-to-front z-index behavior
+- **Drag + Resize** - Draggable XP windows with conditional resize (Minesweeper fixed-size)
+- **Taskbar Window Buttons** - Every open window appears in the taskbar with minimize/restore toggle
+- **Persistence** - Window position and size restore from localStorage per window type
 
 ### Responsive Design
-- **Desktop View** - Full XP desktop experience (768px and above)
-- **Mobile Fallback** - Simplified view for smaller screens
+- **Desktop View** - Full XP desktop experience with multi-window interactions (768px and above)
+- **Mobile Fallback** - Full-screen modal window for the active app (drag/resize disabled)
 
 ## 🚀 Live Demo
 
@@ -145,17 +149,21 @@ npm run dev
 - [x] Single-selection model for desktop icons
 - [x] Hover and selected states with translucent backgrounds
 - [x] Wallpaper click to deselect all icons
-- [x] Mobile responsive fallback
+- [x] Window manager with single-instance open/focus behavior
+- [x] Draggable windows with XP title bars and controls
+- [x] Conditional resizing (Minesweeper fixed-size, other windows resizable)
+- [x] Taskbar window buttons with minimize/restore behavior
+- [x] Minimize animation toward taskbar button target
+- [x] localStorage persistence for window geometry
+- [x] Mobile full-screen window modal fallback
 - [x] Vertical column layout for icons
 - [x] Authentic XP text styling (subtle shadow, no black border)
 
 ### 📝 Future Enhancements
-- [ ] Window management system (opening windows from icons)
-- [ ] Draggable windows with XP-style title bars
 - [ ] Start menu with program list
 - [ ] Right-click context menus
-- [ ] Additional desktop icons with real content
-- [ ] Content integration (Projects, About, Contact as actual windows)
+- [ ] Additional desktop icons with deeper app content
+- [ ] Playable embedded versions of Minesweeper/Paint/DOOM
 
 ## 🎭 The Desktop Metaphor
 
@@ -164,7 +172,38 @@ Instead of traditional page navigation, this portfolio uses the Windows XP deskt
 - **Desktop Icons** represent portfolio sections (About Me, Projects, Contact)
 - **Taskbar** provides system status and quick access
 - **Selection** mimics XP's translucent blue highlight
-- **Double-click** (future) will open content in draggable windows
+- **Double-click** opens content in draggable XP windows
+
+## 🪟 Window System Notes
+
+### Registry-Driven Window Types
+
+Window configuration is centralized in `src/hooks/useWindowRegistry.ts`.
+Each `windowType` maps to:
+- title
+- content component
+- default size
+- minimum size
+- `resizable` flag
+
+Current types:
+- `about`
+- `projects`
+- `contact`
+- `resume`
+- `minesweeper` (fixed-size)
+- `paint`
+- `doom`
+
+### Persistence Keys
+
+Window geometry persists in localStorage using these keys:
+- `window:<type>:position`
+- `window:<type>:size`
+
+Examples:
+- `window:projects:position`
+- `window:projects:size`
 
 This creates an immersive, nostalgic experience that stands out from conventional portfolio designs.
 
