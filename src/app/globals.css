@@ -5,8 +5,15 @@
   --foreground: #000000;
   --wallpaper-base: #4a90e2;
   --taskbar-height: 30px;
-  --titlebar-gradient: 180deg, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%, #003dd7 96%, #003dd7;
-  --titlebar-gradient-inactive: rgb(118, 151, 231) 0%, rgb(126, 158, 227) 3%, rgb(148, 175, 232) 6%, rgb(151, 180, 233) 8%, rgb(130, 165, 228) 14%, rgb(124, 159, 226) 17%, rgb(121, 150, 222) 25%, rgb(123, 153, 225) 56%, rgb(130, 169, 233) 81%, rgb(128, 165, 231) 89%, rgb(123, 150, 225) 94%, rgb(122, 147, 223) 97%, rgb(171, 186, 227) 100%;
+  --titlebar-gradient:
+    180deg, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%,
+    #003dd7 96%, #003dd7;
+  --titlebar-gradient-inactive:
+    rgb(118, 151, 231) 0%, rgb(126, 158, 227) 3%, rgb(148, 175, 232) 6%,
+    rgb(151, 180, 233) 8%, rgb(130, 165, 228) 14%, rgb(124, 159, 226) 17%,
+    rgb(121, 150, 222) 25%, rgb(123, 153, 225) 56%, rgb(130, 169, 233) 81%,
+    rgb(128, 165, 231) 89%, rgb(123, 150, 225) 94%, rgb(122, 147, 223) 97%,
+    rgb(171, 186, 227) 100%;
 
   --winxp-blue: #235cdb;
   --winxp-blue-dark: #1a3d8c;
@@ -104,6 +111,18 @@ body {
   transform-origin: top left;
 }
 
+@keyframes window-restore {
+  from {
+    transform: var(--window-restore-from-transform);
+    opacity: 0.15;
+  }
+
+  to {
+    transform: translate(0, 0) scale(1, 1);
+    opacity: 1;
+  }
+}
+
 .winxp-window-titlebar {
   display: flex;
   min-height: 30px;
@@ -169,20 +188,20 @@ body {
 
 .window-menubar {
   display: flex;
-  min-height: 24px;
+  min-height: 30px;
   align-items: center;
-  gap: 1px;
-  padding: 2px 6px;
-  border-top: 1px solid #89adf7;
-  border-bottom: 1px solid #c7d9f9;
+  padding-right: 6px;
   background: #ece9d8;
 }
 
 .window-menu-item {
   border: 0;
-  border-radius: 2px;
-  padding: 2px 8px;
+  min-width: 50px;
+  height: 30px;
+  border-radius: 1px;
   background: transparent;
+  padding: 2px 8px;
+  cursor: pointer;
   color: #000000;
   font-size: 11px;
   line-height: 1;
@@ -287,19 +306,13 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 8px;
-  background: linear-gradient(
-    to right,
-    rgb(31, 47, 134) 0%,
-    rgb(49, 101, 196) 20%,
-    rgb(37, 98, 223) 78%,
-    rgb(29, 78, 192) 100%
-  );
+  background: linear-gradient(var(--titlebar-gradient));
 }
 
 .winxp-taskbar-button {
   display: inline-flex;
-  height: 24px;
-  min-width: 124px;
+  height: 25px;
+  min-width: 150px;
   max-width: 196px;
   flex-shrink: 0;
   align-items: center;
