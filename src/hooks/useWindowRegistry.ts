@@ -21,7 +21,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   projects: {
     title: "Projects",
     iconName: "projects",
-    iconPath: "/assets/xp-icons/projects.png",
+    iconPath: "/assets/xp-icons/folder-closed.webp",
     component: ProjectsWindow,
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 480, height: 320 },
@@ -57,7 +57,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   paint: {
     title: "Paint",
     iconName: "paint",
-    iconPath: "/assets/xp-icons/camera.webp",
+    iconPath: "/assets/xp-icons/paint.webp",
     component: PaintWindow,
     defaultSize: { width: 900, height: 650 },
     minSize: { width: 480, height: 340 },
@@ -66,7 +66,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   doom: {
     title: "DOOM",
     iconName: "doom",
-    iconPath: "/assets/xp-icons/chrome.webp",
+    iconPath: "/assets/xp-icons/doom.webp",
     component: DoomWindow,
     defaultSize: { width: 960, height: 700 },
     minSize: { width: 640, height: 420 },
