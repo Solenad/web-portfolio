@@ -5,11 +5,13 @@ import MinesweeperWindow from "@/features/window/components/content/MinesweeperW
 import PaintWindow from "@/features/window/components/content/PaintWindow";
 import ProjectsWindow from "@/features/window/components/content/ProjectsWindow";
 import ResumeWindow from "@/features/window/components/content/ResumeWindow";
+import type { DesktopIconItem } from "@/types/desktop.types";
 import type { WindowRegistryEntry, WindowType } from "@/types/window.types";
 
 const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   about: {
     title: "About Me",
+    iconName: "about",
     iconPath: "/assets/xp-icons/user.webp",
     component: AboutWindow,
     defaultSize: { width: 600, height: 400 },
@@ -18,6 +20,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   projects: {
     title: "Projects",
+    iconName: "projects",
     iconPath: "/assets/xp-icons/projects.png",
     component: ProjectsWindow,
     defaultSize: { width: 800, height: 600 },
@@ -26,6 +29,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   contact: {
     title: "Contact",
+    iconName: "contact",
     iconPath: "/assets/xp-icons/mail.webp",
     component: ContactWindow,
     defaultSize: { width: 600, height: 400 },
@@ -34,7 +38,8 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   resume: {
     title: "Resume",
-    iconPath: "/assets/xp-icons/my-computer.webp",
+    iconName: "resume",
+    iconPath: "/assets/xp-icons/pdf.webp",
     component: ResumeWindow,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 360, height: 260 },
@@ -42,6 +47,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   minesweeper: {
     title: "Minesweeper",
+    iconName: "minesweeper",
     iconPath: "/assets/xp-icons/minesweeper.webp",
     component: MinesweeperWindow,
     defaultSize: { width: 360, height: 460 },
@@ -50,6 +56,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   paint: {
     title: "Paint",
+    iconName: "paint",
     iconPath: "/assets/xp-icons/camera.webp",
     component: PaintWindow,
     defaultSize: { width: 900, height: 650 },
@@ -58,6 +65,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   doom: {
     title: "DOOM",
+    iconName: "doom",
     iconPath: "/assets/xp-icons/chrome.webp",
     component: DoomWindow,
     defaultSize: { width: 960, height: 700 },
@@ -66,7 +74,24 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
 };
 
-export function getRegistryEntry(windowType: string): WindowRegistryEntry | null {
+export function getDesktopIcons(): DesktopIconItem[] {
+  return (Object.keys(WINDOW_REGISTRY) as WindowType[]).map((windowType) => {
+    const entry = WINDOW_REGISTRY[windowType];
+
+    return {
+      id: windowType,
+      label: entry.title,
+      iconName: entry.iconName,
+      iconPath: entry.iconPath,
+      windowId: `window-${windowType}`,
+      windowType,
+    };
+  });
+}
+
+export function getRegistryEntry(
+  windowType: string,
+): WindowRegistryEntry | null {
   if (windowType in WINDOW_REGISTRY) {
     return WINDOW_REGISTRY[windowType as WindowType];
   }
@@ -77,9 +102,11 @@ export function getRegistryEntry(windowType: string): WindowRegistryEntry | null
 export function useWindowRegistry(): {
   registry: Record<WindowType, WindowRegistryEntry>;
   getRegistryEntry: (windowType: string) => WindowRegistryEntry | null;
+  getDesktopIcons: () => DesktopIconItem[];
 } {
   return {
     registry: WINDOW_REGISTRY,
     getRegistryEntry,
+    getDesktopIcons,
   };
 }
