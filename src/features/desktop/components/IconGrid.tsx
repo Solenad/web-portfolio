@@ -9,12 +9,14 @@ interface Props {
   icons: DesktopIconItem[];
   selectedId: string | null;
   onSelectIcon: (iconId: string) => void;
+  onOpenIcon: (icon: DesktopIconItem) => void;
 }
 
 export default function IconGrid({
   icons,
   selectedId,
   onSelectIcon,
+  onOpenIcon,
 }: Props): JSX.Element {
   return (
     <div className="grid h-full auto-cols-[104px] grid-flow-col grid-rows-[repeat(6,112px)] justify-start gap-2 overflow-x-auto overflow-y-hidden p-5">
@@ -26,6 +28,7 @@ export default function IconGrid({
           iconPath={icon.iconPath}
           isSelected={selectedId === icon.id}
           onSelect={() => onSelectIcon(icon.id)}
+          onOpen={() => onOpenIcon(icon)}
           windowId={icon.windowId}
           windowType={icon.windowType}
         />
