@@ -34,6 +34,7 @@ export interface WindowContentProps {
 
 export interface WindowRegistryEntry {
   title: string;
+  iconPath: string;
   component: ComponentType<WindowContentProps>;
   defaultSize: WindowSize;
   minSize: WindowSize;

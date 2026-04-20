@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 import type { JSX } from "react";
 
+import { getRegistryEntry } from "@/hooks/useWindowRegistry";
 import { useWindowManager } from "@/hooks/useWindowManager";
 import type { WindowInstance } from "@/types/window.types";
 
@@ -70,15 +72,26 @@ export default function TaskbarButton({
     focusWindow(windowInstance.id);
   };
 
+  const registryEntry = getRegistryEntry(windowInstance.type);
+  const iconPath = registryEntry?.iconPath ?? "/assets/xp-icons/user.webp";
+
   return (
     <button
       ref={buttonRef}
       type="button"
       onClick={handleClick}
-      className={`winxp-taskbar-button ${isActive && !windowInstance.minimized ? "winxp-taskbar-button-active" : "winxp-taskbar-button-idle"}`}
+      className={`winxp-taskbar-button ${isActive && !windowInstance.minimized ? "winxp-taskbar-button-active" : "winxp-taskbar-button-idle cursor-pointer"}`}
       aria-label={`Toggle ${windowInstance.title} window`}
       title={windowInstance.title}
     >
+      <Image
+        src={iconPath}
+        alt=""
+        width={16}
+        height={16}
+        className="taskbar-button-icon"
+        aria-hidden="true"
+      />
       <span className="truncate">{windowInstance.title}</span>
     </button>
   );

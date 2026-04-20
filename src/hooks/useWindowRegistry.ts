@@ -10,6 +10,7 @@ import type { WindowRegistryEntry, WindowType } from "@/types/window.types";
 const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   about: {
     title: "About Me",
+    iconPath: "/assets/xp-icons/user.webp",
     component: AboutWindow,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 360, height: 260 },
@@ -17,6 +18,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   projects: {
     title: "Projects",
+    iconPath: "/assets/xp-icons/projects.png",
     component: ProjectsWindow,
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 480, height: 320 },
@@ -24,6 +26,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   contact: {
     title: "Contact",
+    iconPath: "/assets/xp-icons/mail.webp",
     component: ContactWindow,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 360, height: 260 },
@@ -31,6 +34,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   resume: {
     title: "Resume",
+    iconPath: "/assets/xp-icons/my-computer.webp",
     component: ResumeWindow,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 360, height: 260 },
@@ -38,6 +42,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   minesweeper: {
     title: "Minesweeper",
+    iconPath: "/assets/xp-icons/minesweeper.webp",
     component: MinesweeperWindow,
     defaultSize: { width: 360, height: 460 },
     minSize: { width: 360, height: 460 },
@@ -45,6 +50,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   paint: {
     title: "Paint",
+    iconPath: "/assets/xp-icons/camera.webp",
     component: PaintWindow,
     defaultSize: { width: 900, height: 650 },
     minSize: { width: 480, height: 340 },
@@ -52,6 +58,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   },
   doom: {
     title: "DOOM",
+    iconPath: "/assets/xp-icons/chrome.webp",
     component: DoomWindow,
     defaultSize: { width: 960, height: 700 },
     minSize: { width: 640, height: 420 },

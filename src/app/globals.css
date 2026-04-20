@@ -4,7 +4,7 @@
   --background: #4a90e2;
   --foreground: #000000;
   --wallpaper-base: #4a90e2;
-  --taskbar-height: 30px;
+  --taskbar-height: 28px;
   --titlebar-gradient:
     180deg, #0997ff, #0053ee 8%, #0050ee 40%, #06f 88%, #06f 93%, #005bff 95%,
     #003dd7 96%, #003dd7;
@@ -322,18 +322,36 @@ body {
   color: #ffffff;
   font-size: 11px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  background: linear-gradient(180deg, #3ba0e7 0, #3295eb 50%, #3389d4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .winxp-taskbar-button-idle {
-  background: #3c81f3;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .winxp-taskbar-button-active {
-  background: #1e52b7;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  background: linear-gradient(180deg, #2a7bc4 0, #2472c0 50%, #2569ae);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.winxp-taskbar-button:hover {
-  filter: brightness(1.08);
+.winxp-taskbar-button:hover:not(.winxp-taskbar-button-active) {
+  background: linear-gradient(180deg, #5ab4f0 0, #4da8ed 50%, #4e9dd6);
+}
+.taskbar-button-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.window-titlebar-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }

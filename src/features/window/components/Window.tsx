@@ -348,8 +348,18 @@ export default function Window({
         aria-modal="true"
         aria-label={windowInstance.title}
       >
-        <div className="window-mobile-header">
+      <div className="window-mobile-header">
+        <div className="flex items-center gap-2">
+          <Image
+            src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
+            alt=""
+            width={20}
+            height={20}
+            className="window-titlebar-icon"
+            aria-hidden="true"
+          />
           <span className="window-title-text">{windowInstance.title}</span>
+        </div>
           <button
             type="button"
             onClick={(event) => {
@@ -403,12 +413,22 @@ export default function Window({
       aria-modal="false"
       aria-label={windowInstance.title}
     >
-      <div
-        className="winxp-window-titlebar"
-        onMouseDown={handleTitleMouseDown}
-        onDoubleClick={handleDoubleClickTitle}
-      >
+    <div
+      className="winxp-window-titlebar"
+      onMouseDown={handleTitleMouseDown}
+      onDoubleClick={handleDoubleClickTitle}
+    >
+      <div className="flex items-center gap-2">
+        <Image
+          src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
+          alt=""
+          width={20}
+          height={20}
+          className="window-titlebar-icon"
+          aria-hidden="true"
+        />
         <span className="window-title-text">{windowInstance.title}</span>
+      </div>
         <div className="window-controls">
           <button
             type="button"
