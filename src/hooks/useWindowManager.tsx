@@ -24,7 +24,6 @@ import type {
 } from "@/types/window.types";
 
 const TASKBAR_HEIGHT = 30;
-const CASCADE_OFFSET = 30;
 const MINIMIZE_DURATION_MS = 180;
 const RESTORE_DURATION_MS = 180;
 const WINDOW_ID_SUFFIX_LENGTH = 6;
@@ -169,7 +168,6 @@ export function WindowManagerProvider({
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
   const openWindowsRef = useRef<WindowInstance[]>([]);
   const zIndexCounterRef = useRef<number>(200);
-  const cascadeStepRef = useRef<number>(0);
   const taskbarRectsRef = useRef<Record<string, WindowRect>>({});
   const minimizeTimeoutsRef = useRef<Record<string, number>>({});
 
@@ -192,24 +190,15 @@ export function WindowManagerProvider({
     };
   }, []);
 
-  const getNextCascadePosition = useCallback((size: WindowSize): WindowPosition => {
+  const getCenteredPosition = useCallback((size: WindowSize): WindowPosition => {
     const bounds = getViewportBounds();
-    const maxX = Math.max(0, bounds.width - size.width);
-    const maxY = Math.max(0, bounds.height - size.height);
+    const centerX = Math.max(0, bounds.width - size.width) / 2;
+    const centerY = Math.max(0, bounds.height - size.height) / 2;
 
-    const offset = cascadeStepRef.current * CASCADE_OFFSET;
-    const nextPosition: WindowPosition = {
-      x: Math.min(offset, maxX),
-      y: Math.min(offset, maxY),
+    return {
+      x: Math.round(centerX),
+      y: Math.round(centerY),
     };
-
-    if (nextPosition.x >= maxX || nextPosition.y >= maxY) {
-      cascadeStepRef.current = 0;
-    } else {
-      cascadeStepRef.current += 1;
-    }
-
-    return nextPosition;
   }, []);
 
   const openWindow = useCallback(
@@ -253,7 +242,7 @@ export function WindowManagerProvider({
       const persistedGeometry = loadFromStorage(windowType);
       const initialSize = persistedGeometry?.size ?? registryEntry.defaultSize;
       const initialPosition =
-        persistedGeometry?.position ?? getNextCascadePosition(initialSize);
+        persistedGeometry?.position ?? getCenteredPosition(initialSize);
 
       const windowId = makeWindowId(windowType);
       const nextZIndex = zIndexCounterRef.current++;
@@ -279,7 +268,7 @@ export function WindowManagerProvider({
       setWindows([...currentWindows, newWindow]);
       setActiveWindowId(windowId);
     },
-    [getNextCascadePosition, setWindows],
+    [getCenteredPosition, setWindows],
   );
 
   const closeWindow = useCallback((windowId: string): void => {

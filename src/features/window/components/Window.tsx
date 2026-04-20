@@ -2,11 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
-import type {
-  CSSProperties,
-  JSX,
-  MouseEvent as ReactMouseEvent,
-} from "react";
+import type { CSSProperties, JSX, MouseEvent as ReactMouseEvent } from "react";
 
 import { getRegistryEntry } from "@/hooks/useWindowRegistry";
 import { useWindowManager } from "@/hooks/useWindowManager";
@@ -22,15 +18,7 @@ interface Props {
   isMobile: boolean;
 }
 
-type ResizeDirection =
-  | "n"
-  | "s"
-  | "e"
-  | "w"
-  | "ne"
-  | "nw"
-  | "se"
-  | "sw";
+type ResizeDirection = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
 
 interface DragState {
   startMouseX: number;
@@ -191,7 +179,11 @@ export default function Window({
         windowInstance.minSize,
       );
 
-      updateWindowSize(windowInstance.id, nextGeometry.size, nextGeometry.position);
+      updateWindowSize(
+        windowInstance.id,
+        nextGeometry.size,
+        nextGeometry.position,
+      );
     };
 
     const handleMouseUp = (): void => {
@@ -219,8 +211,10 @@ export default function Window({
     focusWindow(windowInstance.id);
   };
 
-  const handleTitleMouseDown = (event: ReactMouseEvent<HTMLDivElement>): void => {
-    if (isMobile || windowInstance.maximized) {
+  const handleTitleMouseDown = (
+    event: ReactMouseEvent<HTMLDivElement>,
+  ): void => {
+    if (isMobile) {
       return;
     }
 
@@ -231,6 +225,38 @@ export default function Window({
     const target = event.target as HTMLElement;
 
     if (target.closest("button") !== null) {
+      return;
+    }
+
+    // Drag-to-restore: if maximized, restore first then position window with cursor on titlebar
+    if (windowInstance.maximized && windowInstance.previousRect !== null) {
+      toggleMaximizeWindow(windowInstance.id);
+
+      // After restoring, position window so cursor is over the titlebar area
+      // Titlebar is ~28px tall, so place window above cursor by half titlebar height
+      const titlebarHeight = 28;
+      const newWidth = windowInstance.previousRect.width;
+      const newHeight = windowInstance.previousRect.height;
+
+      // Center the window horizontally on the cursor, keep vertically positioned
+      // so cursor is on the titlebar (slightly above center)
+      let newX = event.clientX - newWidth / 2;
+      let newY = event.clientY - titlebarHeight / 2;
+
+      // Clamp to viewport bounds
+      const maxX = window.innerWidth - newWidth;
+      const maxY = window.innerHeight - newHeight;
+      newX = Math.max(0, Math.min(newX, maxX));
+      newY = Math.max(0, Math.min(newY, maxY));
+
+      updateWindowPosition(windowInstance.id, { x: newX, y: newY });
+
+      setDragState({
+        startMouseX: event.clientX,
+        startMouseY: event.clientY,
+        startPosition: { x: newX, y: newY },
+      });
+
       return;
     }
 
@@ -271,18 +297,26 @@ export default function Window({
     };
 
   const animatedStyle = useMemo((): CSSProperties => {
-    if (!windowInstance.isMinimizing || windowInstance.minimizeTarget === null) {
-      if (!windowInstance.isRestoring || windowInstance.restoreSource === null) {
+    if (
+      !windowInstance.isMinimizing ||
+      windowInstance.minimizeTarget === null
+    ) {
+      if (
+        !windowInstance.isRestoring ||
+        windowInstance.restoreSource === null
+      ) {
         return {};
       }
 
       const sourceScaleX = Math.max(
         0.08,
-        windowInstance.restoreSource.width / Math.max(1, windowInstance.size.width),
+        windowInstance.restoreSource.width /
+          Math.max(1, windowInstance.size.width),
       );
       const sourceScaleY = Math.max(
         0.08,
-        windowInstance.restoreSource.height / Math.max(1, windowInstance.size.height),
+        windowInstance.restoreSource.height /
+          Math.max(1, windowInstance.size.height),
       );
 
       const sourceTranslateX =
@@ -300,7 +334,8 @@ export default function Window({
 
     const targetScaleX = Math.max(
       0.08,
-      windowInstance.minimizeTarget.width / Math.max(1, windowInstance.size.width),
+      windowInstance.minimizeTarget.width /
+        Math.max(1, windowInstance.size.width),
     );
     const targetScaleY = Math.max(
       0.08,
@@ -348,18 +383,18 @@ export default function Window({
         aria-modal="true"
         aria-label={windowInstance.title}
       >
-      <div className="window-mobile-header">
-        <div className="flex items-center gap-2">
-          <Image
-            src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
-            alt=""
-            width={20}
-            height={20}
-            className="window-titlebar-icon"
-            aria-hidden="true"
-          />
-          <span className="window-title-text">{windowInstance.title}</span>
-        </div>
+        <div className="window-mobile-header">
+          <div className="flex items-center gap-2">
+            <Image
+              src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
+              alt=""
+              width={20}
+              height={20}
+              className="window-titlebar-icon"
+              aria-hidden="true"
+            />
+            <span className="window-title-text">{windowInstance.title}</span>
+          </div>
           <button
             type="button"
             onClick={(event) => {
@@ -385,6 +420,14 @@ export default function Window({
               {item}
             </button>
           ))}
+          <div className="ml-auto bg-[#fafafa] h-full px-4 flex items-center">
+            <Image
+              width={18}
+              height={18}
+              alt="xp_logo"
+              src="/assets/xp-icons/xp_logo.webp"
+            />
+          </div>
         </div>
         <div className="window-content-area">
           <ContentComponent
@@ -413,22 +456,22 @@ export default function Window({
       aria-modal="false"
       aria-label={windowInstance.title}
     >
-    <div
-      className="winxp-window-titlebar"
-      onMouseDown={handleTitleMouseDown}
-      onDoubleClick={handleDoubleClickTitle}
-    >
-      <div className="flex items-center gap-2">
-        <Image
-          src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
-          alt=""
-          width={20}
-          height={20}
-          className="window-titlebar-icon"
-          aria-hidden="true"
-        />
-        <span className="window-title-text">{windowInstance.title}</span>
-      </div>
+      <div
+        className="winxp-window-titlebar"
+        onMouseDown={handleTitleMouseDown}
+        onDoubleClick={handleDoubleClickTitle}
+      >
+        <div className="flex items-center gap-2">
+          <Image
+            src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
+            alt=""
+            width={20}
+            height={20}
+            className="window-titlebar-icon"
+            aria-hidden="true"
+          />
+          <span className="window-title-text">{windowInstance.title}</span>
+        </div>
         <div className="window-controls">
           <button
             type="button"
@@ -455,7 +498,9 @@ export default function Window({
               event.stopPropagation();
               toggleMaximizeWindow(windowInstance.id);
             }}
-            aria-label={windowInstance.maximized ? "Restore window" : "Maximize window"}
+            aria-label={
+              windowInstance.maximized ? "Restore window" : "Maximize window"
+            }
           >
             <Image
               src="/assets/xp-icons/maximize"
@@ -489,10 +534,22 @@ export default function Window({
 
       <div className="window-menubar" role="toolbar" aria-label="Window menu">
         {WINDOW_MENU_ITEMS.map((item) => (
-          <button key={item} type="button" className="window-menu-item">
+          <button
+            key={item}
+            type="button"
+            className="window-menu-item justify-evenly"
+          >
             {item}
           </button>
         ))}
+        <div className="ml-auto bg-[#fafafa] h-full px-4 flex items-center">
+          <Image
+            width={18}
+            height={18}
+            alt="xp_logo"
+            src="/assets/xp-icons/xp_logo.webp"
+          />
+        </div>
       </div>
 
       <div className="window-content-area">
