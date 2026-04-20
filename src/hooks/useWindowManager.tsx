@@ -26,6 +26,7 @@ import type {
 const TASKBAR_HEIGHT = 30;
 const CASCADE_OFFSET = 30;
 const MINIMIZE_DURATION_MS = 180;
+const RESTORE_DURATION_MS = 180;
 const WINDOW_ID_SUFFIX_LENGTH = 6;
 
 const WindowManagerContext = createContext<WindowManagerContextValue | null>(null);
@@ -236,7 +237,9 @@ export function WindowManagerProvider({
             ...windowInstance,
             minimized: false,
             isMinimizing: false,
+            isRestoring: false,
             minimizeTarget: null,
+            restoreSource: null,
             zIndex: nextZIndex,
           };
         });
@@ -265,10 +268,12 @@ export function WindowManagerProvider({
         minimized: false,
         maximized: false,
         isMinimizing: false,
+        isRestoring: false,
         resizable: registryEntry.resizable,
         minSize: registryEntry.minSize,
         previousRect: null,
         minimizeTarget: null,
+        restoreSource: null,
       };
 
       setWindows([...currentWindows, newWindow]);
@@ -308,7 +313,9 @@ export function WindowManagerProvider({
         ...windowInstance,
         minimized: false,
         isMinimizing: false,
+        isRestoring: false,
         minimizeTarget: null,
+        restoreSource: null,
         zIndex: zIndexCounterRef.current++,
       };
     });
@@ -327,7 +334,9 @@ export function WindowManagerProvider({
         ...windowInstance,
         minimized: true,
         isMinimizing: false,
+        isRestoring: false,
         minimizeTarget: null,
+        restoreSource: null,
       };
     });
 
@@ -349,14 +358,18 @@ export function WindowManagerProvider({
             ...windowInstance,
             minimized: true,
             isMinimizing: false,
+            isRestoring: false,
             minimizeTarget: null,
+            restoreSource: null,
           };
         }
 
         return {
           ...windowInstance,
           isMinimizing: true,
+          isRestoring: false,
           minimizeTarget: targetRect,
+          restoreSource: null,
         };
       });
 
@@ -384,6 +397,7 @@ export function WindowManagerProvider({
 
   const restoreWindow = useCallback((windowId: string): void => {
     clearMinimizeTimeout(minimizeTimeoutsRef, windowId);
+    const sourceRect = taskbarRectsRef.current[windowId] ?? null;
     const updatedWindows = openWindowsRef.current.map((windowInstance) => {
       if (windowInstance.id !== windowId) {
         return windowInstance;
@@ -393,7 +407,9 @@ export function WindowManagerProvider({
         ...windowInstance,
         minimized: false,
         isMinimizing: false,
+        isRestoring: sourceRect !== null,
         minimizeTarget: null,
+        restoreSource: sourceRect,
         zIndex: zIndexCounterRef.current++,
       };
     });
@@ -401,6 +417,33 @@ export function WindowManagerProvider({
     setWindows(updatedWindows);
 
     setActiveWindowId(windowId);
+
+    if (sourceRect === null) {
+      return;
+    }
+
+    const existingTimeoutId = minimizeTimeoutsRef.current[windowId];
+
+    if (existingTimeoutId !== undefined) {
+      window.clearTimeout(existingTimeoutId);
+    }
+
+    minimizeTimeoutsRef.current[windowId] = window.setTimeout(() => {
+      const settledWindows = openWindowsRef.current.map((windowInstance) => {
+        if (windowInstance.id !== windowId) {
+          return windowInstance;
+        }
+
+        return {
+          ...windowInstance,
+          isRestoring: false,
+          restoreSource: null,
+        };
+      });
+
+      setWindows(settledWindows);
+      delete minimizeTimeoutsRef.current[windowId];
+    }, RESTORE_DURATION_MS);
   }, [setWindows]);
 
   const toggleMaximizeWindow = useCallback((windowId: string): void => {
@@ -425,6 +468,8 @@ export function WindowManagerProvider({
           },
           previousRect: null,
           maximized: false,
+          isRestoring: false,
+          restoreSource: null,
           zIndex: zIndexCounterRef.current++,
         };
       }
@@ -443,7 +488,9 @@ export function WindowManagerProvider({
           height: bounds.height,
         },
         maximized: true,
+        isRestoring: false,
         minimizeTarget: null,
+        restoreSource: null,
         zIndex: zIndexCounterRef.current++,
       };
     });

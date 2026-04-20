@@ -50,10 +50,12 @@ export interface WindowInstance {
   minimized: boolean;
   maximized: boolean;
   isMinimizing: boolean;
+  isRestoring: boolean;
   resizable: boolean;
   minSize: WindowSize;
   previousRect: WindowRect | null;
   minimizeTarget: WindowRect | null;
+  restoreSource: WindowRect | null;
 }
 
 export interface PersistedWindowGeometry {

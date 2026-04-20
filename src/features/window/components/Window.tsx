@@ -47,6 +47,8 @@ interface ResizeState {
 }
 
 const MINIMIZE_DURATION_MS = 180;
+const RESTORE_DURATION_MS = 180;
+const WINDOW_MENU_ITEMS = ["File", "View", "Favorites", "Tools", "Help"];
 
 function getResizeCursor(direction: ResizeDirection): string {
   switch (direction) {
@@ -270,7 +272,30 @@ export default function Window({
 
   const animatedStyle = useMemo((): CSSProperties => {
     if (!windowInstance.isMinimizing || windowInstance.minimizeTarget === null) {
-      return {};
+      if (!windowInstance.isRestoring || windowInstance.restoreSource === null) {
+        return {};
+      }
+
+      const sourceScaleX = Math.max(
+        0.08,
+        windowInstance.restoreSource.width / Math.max(1, windowInstance.size.width),
+      );
+      const sourceScaleY = Math.max(
+        0.08,
+        windowInstance.restoreSource.height / Math.max(1, windowInstance.size.height),
+      );
+
+      const sourceTranslateX =
+        windowInstance.restoreSource.x - windowInstance.position.x + 8;
+      const sourceTranslateY =
+        windowInstance.restoreSource.y - windowInstance.position.y + 2;
+
+      return {
+        "--window-restore-from-transform": `translate(${sourceTranslateX}px, ${sourceTranslateY}px) scale(${sourceScaleX}, ${sourceScaleY})`,
+        transform: `translate(${sourceTranslateX}px, ${sourceTranslateY}px) scale(${sourceScaleX}, ${sourceScaleY})`,
+        opacity: 0.15,
+        animation: `window-restore ${RESTORE_DURATION_MS}ms ease-out forwards`,
+      } as CSSProperties;
     }
 
     const targetScaleX = Math.max(
@@ -295,7 +320,9 @@ export default function Window({
     };
   }, [
     windowInstance.isMinimizing,
+    windowInstance.isRestoring,
     windowInstance.minimizeTarget,
+    windowInstance.restoreSource,
     windowInstance.position.x,
     windowInstance.position.y,
     windowInstance.size.height,
@@ -329,11 +356,25 @@ export default function Window({
               event.stopPropagation();
               closeWindow(windowInstance.id);
             }}
-            className="window-control-button window-control-close"
+            className="window-control-button"
             aria-label="Close window"
           >
-            X
+            <Image
+              src="/assets/xp-icons/exit"
+              alt=""
+              aria-hidden="true"
+              width={21}
+              height={21}
+              className="window-control-icon"
+            />
           </button>
+        </div>
+        <div className="window-menubar" role="toolbar" aria-label="Window menu">
+          {WINDOW_MENU_ITEMS.map((item) => (
+            <button key={item} type="button" className="window-menu-item">
+              {item}
+            </button>
+          ))}
         </div>
         <div className="window-content-area">
           <ContentComponent
@@ -382,9 +423,9 @@ export default function Window({
               src="/assets/xp-icons/minimize"
               alt=""
               aria-hidden="true"
-              width={12}
-              height={12}
-              className="h-3 w-3"
+              width={21}
+              height={21}
+              className="window-control-icon"
             />
           </button>
           <button
@@ -400,14 +441,14 @@ export default function Window({
               src="/assets/xp-icons/maximize"
               alt=""
               aria-hidden="true"
-              width={12}
-              height={12}
-              className="h-3 w-3"
+              width={21}
+              height={21}
+              className="window-control-icon"
             />
           </button>
           <button
             type="button"
-            className="window-control-button window-control-close"
+            className="window-control-button"
             onClick={(event) => {
               event.stopPropagation();
               closeWindow(windowInstance.id);
@@ -418,12 +459,20 @@ export default function Window({
               src="/assets/xp-icons/exit"
               alt=""
               aria-hidden="true"
-              width={12}
-              height={12}
-              className="h-3 w-3"
+              width={21}
+              height={21}
+              className="window-control-icon"
             />
           </button>
         </div>
+      </div>
+
+      <div className="window-menubar" role="toolbar" aria-label="Window menu">
+        {WINDOW_MENU_ITEMS.map((item) => (
+          <button key={item} type="button" className="window-menu-item">
+            {item}
+          </button>
+        ))}
       </div>
 
       <div className="window-content-area">
