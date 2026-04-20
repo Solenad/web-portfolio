@@ -4,7 +4,7 @@
   --background: #4a90e2;
   --foreground: #000000;
   --wallpaper-base: #4a90e2;
-  --taskbar-height: 28px;
+  --taskbar-height: 30px;
 
   --winxp-blue: #235cdb;
   --winxp-blue-dark: #1a3d8c;
@@ -79,4 +79,250 @@ body {
 
 .winxp-icon-hover:hover:not(.winxp-icon-selected) {
   background-color: rgba(49, 106, 197, 0.25);
+}
+
+.desktop-window-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+.winxp-window {
+  pointer-events: auto;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #0831d9;
+  border-radius: 7px;
+  background: #ece9d8;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 14px 22px rgba(0, 0, 0, 0.32);
+  transform-origin: top left;
+}
+
+.winxp-window-titlebar {
+  display: flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 5px 0 7px;
+  user-select: none;
+}
+
+.winxp-window-active .winxp-window-titlebar {
+  background: linear-gradient(
+    to right,
+    rgb(31, 47, 134) 0%,
+    rgb(49, 101, 196) 8%,
+    rgb(54, 130, 229) 26%,
+    rgb(37, 98, 223) 76%,
+    rgb(29, 78, 192) 100%
+  );
+}
+
+.winxp-window-inactive .winxp-window-titlebar {
+  background: linear-gradient(
+    to right,
+    rgb(123, 142, 184) 0%,
+    rgb(140, 161, 205) 42%,
+    rgb(122, 146, 196) 100%
+  );
+}
+
+.window-title-text {
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.55);
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.window-control-button {
+  display: inline-flex;
+  height: 18px;
+  width: 22px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(6, 39, 169, 0.95);
+  border-radius: 4px;
+  background: linear-gradient(
+    to bottom,
+    rgb(123, 170, 244) 0%,
+    rgb(84, 134, 226) 42%,
+    rgb(54, 101, 205) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 1px 0 rgba(0, 0, 0, 0.28);
+}
+
+.window-control-button:hover {
+  filter: brightness(1.08);
+}
+
+.window-control-button:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.35);
+}
+
+.window-control-close {
+  border-color: rgba(161, 26, 7, 0.95);
+  background: linear-gradient(
+    to bottom,
+    rgb(255, 169, 142) 0%,
+    rgb(239, 97, 67) 42%,
+    rgb(193, 46, 11) 100%
+  );
+}
+
+.window-content-area {
+  flex: 1;
+  overflow: auto;
+  border-top: 1px solid #5a89ee;
+  border-left: 1px solid #96b6ff;
+  border-right: 1px solid #2349c1;
+  border-bottom: 1px solid #2349c1;
+  background: #ffffff;
+}
+
+.window-resize-handle {
+  position: absolute;
+  z-index: 3;
+}
+
+.window-resize-handle-n,
+.window-resize-handle-s {
+  left: 10px;
+  right: 10px;
+  height: 8px;
+}
+
+.window-resize-handle-e,
+.window-resize-handle-w {
+  top: 10px;
+  bottom: 10px;
+  width: 8px;
+}
+
+.window-resize-handle-n {
+  top: -4px;
+}
+
+.window-resize-handle-s {
+  bottom: -4px;
+}
+
+.window-resize-handle-e {
+  right: -4px;
+}
+
+.window-resize-handle-w {
+  left: -4px;
+}
+
+.window-resize-handle-ne,
+.window-resize-handle-nw,
+.window-resize-handle-se,
+.window-resize-handle-sw {
+  height: 12px;
+  width: 12px;
+}
+
+.window-resize-handle-ne {
+  top: -5px;
+  right: -5px;
+}
+
+.window-resize-handle-nw {
+  top: -5px;
+  left: -5px;
+}
+
+.window-resize-handle-se {
+  right: -5px;
+  bottom: -5px;
+}
+
+.window-resize-handle-sw {
+  bottom: -5px;
+  left: -5px;
+}
+
+.window-mobile-modal {
+  pointer-events: auto;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  background: #ece9d8;
+}
+
+.window-mobile-header {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  background: linear-gradient(
+    to right,
+    rgb(31, 47, 134) 0%,
+    rgb(49, 101, 196) 20%,
+    rgb(37, 98, 223) 78%,
+    rgb(29, 78, 192) 100%
+  );
+}
+
+.winxp-taskbar-button {
+  display: inline-flex;
+  height: 24px;
+  min-width: 124px;
+  max-width: 196px;
+  flex-shrink: 0;
+  align-items: center;
+  border-radius: 3px;
+  border: 1px solid rgba(20, 56, 160, 0.95);
+  padding: 0 10px;
+  color: #ffffff;
+  font-size: 11px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.winxp-taskbar-button-idle {
+  background: linear-gradient(
+    to bottom,
+    rgb(92, 148, 233) 0%,
+    rgb(61, 118, 214) 52%,
+    rgb(40, 93, 193) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.winxp-taskbar-button-active {
+  background: linear-gradient(
+    to bottom,
+    rgb(34, 82, 182) 0%,
+    rgb(28, 66, 152) 46%,
+    rgb(22, 53, 128) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.winxp-taskbar-button:hover {
+  filter: brightness(1.06);
 }
