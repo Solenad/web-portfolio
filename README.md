@@ -26,6 +26,7 @@ A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop in
 - **Drag + Resize** - Draggable XP windows with conditional resize (Minesweeper fixed-size)
 - **Taskbar Window Buttons** - Every open window appears in the taskbar with minimize/restore toggle
 - **Persistence** - Window position and size restore from localStorage per window type
+- **Resume PDF Viewer** - In-window PDF rendering with XP toolbar (save/zoom/print/page nav) and address bar
 
 ### Responsive Design
 - **Desktop View** - Full XP desktop experience with multi-window interactions (768px and above)
@@ -181,10 +182,12 @@ Instead of traditional page navigation, this portfolio uses the Windows XP deskt
 Window configuration is centralized in `src/hooks/useWindowRegistry.ts`.
 Each `windowType` maps to:
 - title
+- icon metadata (`iconName`, `iconPath`)
 - content component
 - default size
 - minimum size
 - `resizable` flag
+- optional toolbar and address-bar config
 
 Current types:
 - `about`
@@ -206,6 +209,14 @@ Examples:
 - `window:projects:size`
 
 This creates an immersive, nostalgic experience that stands out from conventional portfolio designs.
+
+### Resume PDF Asset Requirement
+
+The enhanced Resume window expects `public/assets/resume.pdf`.
+
+- If the file exists, the resume renders inline through `react-pdf`.
+- If the file is missing, the window shows a friendly fallback message.
+- Toolbar/go controls currently use text placeholders so you can replace them with final image assets later.
 
 ## 🤝 Contributing
 
