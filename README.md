@@ -6,7 +6,7 @@
 
 A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop interface. Built with modern web technologies while capturing the nostalgic essence of the classic operating system.
 
-<img width="1918" height="943" alt="Webpage" src="https://github.com/user-attachments/assets/e58b1735-6b6c-400d-aaff-feb195548800" />
+<img width="1919" height="1033" alt="image" src="https://github.com/user-attachments/assets/a6f7f44b-90fa-4d57-9305-efcd1a90dee3" />
 
 ## ✨ Features
 
