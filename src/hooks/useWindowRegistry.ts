@@ -6,7 +6,28 @@ import PaintWindow from "@/features/window/components/content/PaintWindow";
 import ProjectsWindow from "@/features/window/components/content/ProjectsWindow";
 import ResumeWindow from "@/features/window/components/content/ResumeWindow";
 import type { DesktopIconItem } from "@/types/desktop.types";
-import type { WindowRegistryEntry, WindowType } from "@/types/window.types";
+import type {
+  AddressBarConfig,
+  ToolType,
+  WindowRegistryEntry,
+  WindowType,
+} from "@/types/window.types";
+
+const RESUME_TOOLBAR_TOOLS: ToolType[] = [
+  "save",
+  "zoomIn",
+  "zoomOut",
+  "fitWidth",
+  "print",
+  "prevPage",
+  "pageIndicator",
+  "nextPage",
+];
+
+const RESUME_ADDRESS_BAR: AddressBarConfig = {
+  path: "C:\\Rohann\\Desktop\\Resume",
+  showGoButton: true,
+};
 
 const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   about: {
@@ -17,6 +38,8 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 360, height: 260 },
     resizable: true,
+    hasToolbar: false,
+    hasAddressBar: false,
   },
   projects: {
     title: "Projects",
@@ -26,6 +49,8 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 480, height: 320 },
     resizable: true,
+    hasToolbar: false,
+    hasAddressBar: false,
   },
   contact: {
     title: "Contact",
@@ -35,15 +60,22 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 360, height: 260 },
     resizable: true,
+    hasToolbar: false,
+    hasAddressBar: false,
   },
   resume: {
     title: "Resume",
     iconName: "resume",
     iconPath: "/assets/xp-icons/pdf.webp",
     component: ResumeWindow,
-    defaultSize: { width: 600, height: 400 },
-    minSize: { width: 360, height: 260 },
+    defaultSize: { width: 980, height: 700 },
+    minSize: { width: 560, height: 420 },
     resizable: true,
+    enforceDefaultSizeOnOpen: true,
+    hasToolbar: true,
+    hasAddressBar: true,
+    toolbarTools: RESUME_TOOLBAR_TOOLS,
+    addressBarConfig: RESUME_ADDRESS_BAR,
   },
   minesweeper: {
     title: "Minesweeper",
@@ -53,6 +85,8 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     defaultSize: { width: 360, height: 460 },
     minSize: { width: 360, height: 460 },
     resizable: false,
+    hasToolbar: false,
+    hasAddressBar: false,
   },
   paint: {
     title: "Paint",
@@ -62,6 +96,8 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     defaultSize: { width: 900, height: 650 },
     minSize: { width: 480, height: 340 },
     resizable: true,
+    hasToolbar: false,
+    hasAddressBar: false,
   },
   doom: {
     title: "DOOM",
@@ -71,6 +107,8 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     defaultSize: { width: 960, height: 700 },
     minSize: { width: 640, height: 420 },
     resizable: true,
+    hasToolbar: false,
+    hasAddressBar: false,
   },
 };
 
