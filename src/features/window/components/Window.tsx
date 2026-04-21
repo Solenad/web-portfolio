@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, JSX, MouseEvent as ReactMouseEvent } from "react";
 
 import { getRegistryEntry } from "@/hooks/useWindowRegistry";
 import { useWindowManager } from "@/hooks/useWindowManager";
 import type {
+  ToolType,
   WindowInstance,
   WindowPosition,
   WindowSize,
@@ -37,6 +38,32 @@ interface ResizeState {
 const MINIMIZE_DURATION_MS = 180;
 const RESTORE_DURATION_MS = 180;
 const WINDOW_MENU_ITEMS = ["File", "View", "Favorites", "Tools", "Help"];
+const ZOOM_STEP = 0.25;
+const MIN_ZOOM = 0.25;
+const MAX_ZOOM = 4;
+
+function clampNumber(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function shouldRenderToolbarDivider(
+  previousTool: ToolType | null,
+  currentTool: ToolType,
+): boolean {
+  if (previousTool === null) {
+    return false;
+  }
+
+  if (currentTool === "print") {
+    return previousTool !== "print";
+  }
+
+  if (currentTool === "prevPage") {
+    return previousTool !== "prevPage";
+  }
+
+  return false;
+}
 
 function getResizeCursor(direction: ResizeDirection): string {
   switch (direction) {
@@ -122,10 +149,191 @@ export default function Window({
   } = useWindowManager();
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [resizeState, setResizeState] = useState<ResizeState | null>(null);
+  const [currentZoom, setCurrentZoom] = useState<number>(1);
+  const [isFitWidth, setIsFitWidth] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
 
   const registryEntry = getRegistryEntry(windowInstance.type);
+  const hasToolbar = registryEntry?.hasToolbar ?? false;
+  const hasAddressBar = registryEntry?.hasAddressBar ?? false;
+  const toolbarTools = registryEntry?.toolbarTools ?? [];
+  const addressBarConfig = registryEntry?.addressBarConfig;
 
   const contentComponent = registryEntry?.component ?? null;
+
+  const handleZoomIn = useCallback((): void => {
+    setIsFitWidth(false);
+    setCurrentZoom((previousZoom) => {
+      return clampNumber(previousZoom + ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
+    });
+  }, []);
+
+  const handleZoomOut = useCallback((): void => {
+    setIsFitWidth(false);
+    setCurrentZoom((previousZoom) => {
+      return clampNumber(previousZoom - ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
+    });
+  }, []);
+
+  const handleFitWidth = useCallback((): void => {
+    setIsFitWidth(true);
+  }, []);
+
+  const handlePrevPage = useCallback((): void => {
+    setCurrentPage((previousPage) => {
+      return Math.max(1, previousPage - 1);
+    });
+  }, []);
+
+  const handleNextPage = useCallback((): void => {
+    setCurrentPage((previousPage) => {
+      const maxPages = Math.max(1, totalPages);
+      return Math.min(maxPages, previousPage + 1);
+    });
+  }, [totalPages]);
+
+  const handleSave = useCallback((): void => {
+    const downloadLink = document.createElement("a");
+    downloadLink.href = "/assets/resume.pdf";
+    downloadLink.download = "resume.pdf";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }, []);
+
+  const handlePrint = useCallback((): void => {
+    window.print();
+  }, []);
+
+  const handleTotalPagesChange = useCallback((nextTotalPages: number): void => {
+    setTotalPages(nextTotalPages);
+    setCurrentPage((previousPage) => {
+      const boundedMax = Math.max(1, nextTotalPages);
+      return Math.min(previousPage, boundedMax);
+    });
+  }, []);
+
+  const renderToolbarTool = useCallback(
+    (tool: ToolType): JSX.Element => {
+      const pageCount = Math.max(totalPages, 1);
+
+      switch (tool) {
+        case "save":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button"
+              onClick={handleSave}
+            >
+              <span className="window-toolbar-button-content">
+                <Image
+                  src="/assets/xp-icons/pdf.webp"
+                  alt=""
+                  width={14}
+                  height={14}
+                  className="window-toolbar-button-icon"
+                  aria-hidden="true"
+                />
+                <span>Save</span>
+              </span>
+            </button>
+          );
+        case "zoomIn":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button"
+              onClick={handleZoomIn}
+            >
+              Zoom +
+            </button>
+          );
+        case "zoomOut":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button"
+              onClick={handleZoomOut}
+            >
+              Zoom -
+            </button>
+          );
+        case "fitWidth":
+          return (
+            <button
+              type="button"
+              className={`window-toolbar-button ${isFitWidth ? "window-toolbar-button-active" : ""}`}
+              onClick={handleFitWidth}
+            >
+              Fit Width
+            </button>
+          );
+        case "print":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button"
+              onClick={handlePrint}
+            >
+              <span className="window-toolbar-button-content">
+                <Image
+                  src="/assets/xp-icons/my-computer.webp"
+                  alt=""
+                  width={14}
+                  height={14}
+                  className="window-toolbar-button-icon"
+                  aria-hidden="true"
+                />
+                <span>Print</span>
+              </span>
+            </button>
+          );
+        case "prevPage":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button"
+              onClick={handlePrevPage}
+              disabled={currentPage <= 1}
+            >
+              Prev
+            </button>
+          );
+        case "nextPage":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button"
+              onClick={handleNextPage}
+              disabled={currentPage >= pageCount}
+            >
+              Next
+            </button>
+          );
+        case "pageIndicator":
+          return (
+            <span className="window-toolbar-indicator">
+              Page {Math.min(currentPage, pageCount)} of {pageCount}
+            </span>
+          );
+        default:
+          return <span />;
+      }
+    },
+    [
+      currentPage,
+      handleFitWidth,
+      handleNextPage,
+      handlePrevPage,
+      handlePrint,
+      handleSave,
+      handleZoomIn,
+      handleZoomOut,
+      isFitWidth,
+      totalPages,
+    ],
+  );
 
   useEffect(() => {
     if (windowInstance.minimized) {
@@ -364,6 +572,78 @@ export default function Window({
     windowInstance.size.width,
   ]);
 
+  const contentProps = {
+    windowId: windowInstance.id,
+    windowType: windowInstance.type,
+    onZoomIn: handleZoomIn,
+    onZoomOut: handleZoomOut,
+    onFitWidth: handleFitWidth,
+    onPrevPage: handlePrevPage,
+    onNextPage: handleNextPage,
+    onSave: handleSave,
+    onPrint: handlePrint,
+    currentZoom,
+    currentPage,
+    totalPages,
+    isFitWidth,
+    onTotalPagesChange: handleTotalPagesChange,
+  };
+
+  const toolbarElement =
+    hasToolbar && toolbarTools.length > 0 ? (
+      <div className="window-toolbar" role="toolbar" aria-label="Window tools">
+        {toolbarTools.map((tool, index) => {
+          const previousTool = index > 0 ? toolbarTools[index - 1] : null;
+          const shouldRenderDivider = shouldRenderToolbarDivider(
+            previousTool,
+            tool,
+          );
+
+          return (
+            <div
+              key={`${windowInstance.id}-${tool}-${index}`}
+              className="window-toolbar-item"
+            >
+              {shouldRenderDivider ? (
+                <span className="window-toolbar-divider" aria-hidden="true" />
+              ) : null}
+              {renderToolbarTool(tool)}
+            </div>
+          );
+        })}
+      </div>
+    ) : null;
+
+  const addressBarElement =
+    hasAddressBar && addressBarConfig !== undefined ? (
+      <div className="window-address-bar" aria-label="Window address bar">
+        <span className="window-address-bar-label">Address</span>
+        <div className="window-address-bar-input">
+          <Image
+            src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
+            alt=""
+            width={16}
+            height={16}
+            className="window-address-bar-icon"
+            aria-hidden="true"
+          />
+          <span className="window-address-bar-path">{addressBarConfig.path}</span>
+        </div>
+        {addressBarConfig.showGoButton ? (
+          <button
+            type="button"
+            className="window-address-bar-go"
+            onClick={(event) => {
+              event.preventDefault();
+            }}
+            aria-label="Go button placeholder"
+          >
+            <span aria-hidden="true">Go</span>
+          </button>
+        ) : null}
+      </div>
+    ) : null;
+
   if (!windowInstance.isMinimizing && windowInstance.minimized) {
     return null;
   }
@@ -429,12 +709,12 @@ export default function Window({
             />
           </div>
         </div>
+
+        {toolbarElement}
+        {addressBarElement}
+
         <div className="window-content-area">
-          <ContentComponent
-            windowId={windowInstance.id}
-            windowType={windowInstance.type}
-            isMobile
-          />
+          <ContentComponent {...contentProps} isMobile />
         </div>
       </div>
     );
@@ -534,11 +814,7 @@ export default function Window({
 
       <div className="window-menubar" role="toolbar" aria-label="Window menu">
         {WINDOW_MENU_ITEMS.map((item) => (
-          <button
-            key={item}
-            type="button"
-            className="window-menu-item justify-evenly"
-          >
+          <button key={item} type="button" className="window-menu-item">
             {item}
           </button>
         ))}
@@ -552,12 +828,11 @@ export default function Window({
         </div>
       </div>
 
+      {toolbarElement}
+      {addressBarElement}
+
       <div className="window-content-area">
-        <ContentComponent
-          windowId={windowInstance.id}
-          windowType={windowInstance.type}
-          isMobile={false}
-        />
+        <ContentComponent {...contentProps} isMobile={false} />
       </div>
 
       {windowInstance.resizable && !windowInstance.maximized ? (
