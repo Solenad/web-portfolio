@@ -80,7 +80,11 @@ export default function TaskbarButton({
       ref={buttonRef}
       type="button"
       onClick={handleClick}
-      className={`winxp-taskbar-button ${isActive && !windowInstance.minimized ? "winxp-taskbar-button-active" : "winxp-taskbar-button-idle cursor-pointer"}`}
+      className={`winxp-taskbar-button ${
+        isActive && !windowInstance.minimized
+          ? "winxp-taskbar-button-active"
+          : "winxp-taskbar-button-idle cursor-pointer"
+      }`}
       aria-label={`Toggle ${windowInstance.title} window`}
       title={windowInstance.title}
     >

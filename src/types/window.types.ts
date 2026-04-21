@@ -30,6 +30,33 @@ export interface WindowContentProps {
   windowId: string;
   windowType: WindowType;
   isMobile: boolean;
+  onZoomIn?: () => void;
+  onZoomOut?: () => void;
+  onFitWidth?: () => void;
+  onPrevPage?: () => void;
+  onNextPage?: () => void;
+  onSave?: () => void;
+  onPrint?: () => void;
+  currentZoom?: number;
+  currentPage?: number;
+  totalPages?: number;
+  isFitWidth?: boolean;
+  onTotalPagesChange?: (totalPages: number) => void;
+}
+
+export type ToolType =
+  | "save"
+  | "zoomIn"
+  | "zoomOut"
+  | "fitWidth"
+  | "print"
+  | "prevPage"
+  | "nextPage"
+  | "pageIndicator";
+
+export interface AddressBarConfig {
+  path: string;
+  showGoButton: boolean;
 }
 
 export interface WindowRegistryEntry {
@@ -40,6 +67,11 @@ export interface WindowRegistryEntry {
   defaultSize: WindowSize;
   minSize: WindowSize;
   resizable: boolean;
+  enforceDefaultSizeOnOpen?: boolean;
+  hasToolbar?: boolean;
+  hasAddressBar?: boolean;
+  toolbarTools?: ToolType[];
+  addressBarConfig?: AddressBarConfig;
 }
 
 export interface WindowInstance {

@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, JSX, MouseEvent as ReactMouseEvent } from "react";
 
 import { getRegistryEntry } from "@/hooks/useWindowRegistry";
 import { useWindowManager } from "@/hooks/useWindowManager";
 import type {
+  ToolType,
   WindowInstance,
   WindowPosition,
   WindowSize,
@@ -37,6 +38,32 @@ interface ResizeState {
 const MINIMIZE_DURATION_MS = 180;
 const RESTORE_DURATION_MS = 180;
 const WINDOW_MENU_ITEMS = ["File", "View", "Favorites", "Tools", "Help"];
+const ZOOM_STEP = 0.25;
+const MIN_ZOOM = 0.25;
+const MAX_ZOOM = 4;
+
+function clampNumber(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function shouldRenderToolbarDivider(
+  previousTool: ToolType | null,
+  currentTool: ToolType,
+): boolean {
+  if (previousTool === null) {
+    return false;
+  }
+
+  if (currentTool === "print") {
+    return previousTool !== "print";
+  }
+
+  if (currentTool === "prevPage") {
+    return previousTool !== "prevPage";
+  }
+
+  return false;
+}
 
 function getResizeCursor(direction: ResizeDirection): string {
   switch (direction) {
@@ -122,10 +149,206 @@ export default function Window({
   } = useWindowManager();
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [resizeState, setResizeState] = useState<ResizeState | null>(null);
+  const [currentZoom, setCurrentZoom] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(0);
+  const [isClosing, setIsClosing] = useState(false);
+  const isFirstRender = useRef(true);
+
+  const showFadeIn = isFirstRender.current && !windowInstance.isRestoring;
 
   const registryEntry = getRegistryEntry(windowInstance.type);
+  const hasToolbar = registryEntry?.hasToolbar ?? false;
+  const hasAddressBar = registryEntry?.hasAddressBar ?? false;
+  const toolbarTools = registryEntry?.toolbarTools ?? [];
+  const addressBarConfig = registryEntry?.addressBarConfig;
 
   const contentComponent = registryEntry?.component ?? null;
+
+  const handleZoomIn = useCallback((): void => {
+    setCurrentZoom((previousZoom) => {
+      return clampNumber(previousZoom + ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
+    });
+  }, []);
+
+  const handleZoomOut = useCallback((): void => {
+    setCurrentZoom((previousZoom) => {
+      return clampNumber(previousZoom - ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
+    });
+  }, []);
+
+  const handlePrevPage = useCallback((): void => {
+    setCurrentPage((previousPage) => {
+      return Math.max(1, previousPage - 1);
+    });
+  }, []);
+
+  const handleNextPage = useCallback((): void => {
+    setCurrentPage((previousPage) => {
+      const maxPages = Math.max(1, totalPages);
+      return Math.min(maxPages, previousPage + 1);
+    });
+  }, [totalPages]);
+
+  const handleSave = useCallback((): void => {
+    const downloadLink = document.createElement("a");
+    downloadLink.href = "/assets/resume.pdf";
+    downloadLink.download = "resume.pdf";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  }, []);
+
+  const handlePrint = useCallback((): void => {
+    window.print();
+  }, []);
+
+  const handleTotalPagesChange = useCallback((nextTotalPages: number): void => {
+    setTotalPages(nextTotalPages);
+    setCurrentPage((previousPage) => {
+      const boundedMax = Math.max(1, nextTotalPages);
+      return Math.min(previousPage, boundedMax);
+    });
+  }, []);
+
+  const handleClose = useCallback(
+    (event: ReactMouseEvent<HTMLButtonElement>): void => {
+      event.stopPropagation();
+      if (isClosing) {
+        return;
+      }
+      setIsClosing(true);
+      setTimeout(() => {
+        closeWindow(windowInstance.id);
+      }, 150);
+    },
+    [closeWindow, windowInstance.id, isClosing],
+  );
+
+  const renderToolbarTool = useCallback(
+    (tool: ToolType): JSX.Element => {
+      const pageCount = Math.max(totalPages, 1);
+
+      switch (tool) {
+        case "save":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button transition-hover"
+              onClick={handleSave}
+            >
+              <Image
+                src="/assets/xp-icons/save.webp"
+                alt="Save Button"
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Save</span>
+            </button>
+          );
+        case "zoomIn":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button transition-hover"
+              onClick={handleZoomIn}
+            >
+              <Image
+                src="/assets/xp-icons/zoomin.webp"
+                alt="Zoom In Button"
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Zoom In</span>
+            </button>
+          );
+        case "zoomOut":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button transition-hover"
+              onClick={handleZoomOut}
+            >
+              <Image
+                src="/assets/xp-icons/zoomout.webp"
+                alt="Zoom Out Button"
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Zoom Out</span>
+            </button>
+          );
+        case "print":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button transition-hover"
+              onClick={handlePrint}
+            >
+              <Image
+                src="/assets/xp-icons/printer.webp"
+                alt=""
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Print</span>
+            </button>
+          );
+        case "prevPage":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button transition-hover"
+              onClick={handlePrevPage}
+              disabled={currentPage <= 1}
+            >
+              Prev
+            </button>
+          );
+        case "nextPage":
+          return (
+            <button
+              type="button"
+              className="window-toolbar-button transition-hover"
+              onClick={handleNextPage}
+              disabled={currentPage >= pageCount}
+            >
+              Next
+            </button>
+          );
+        case "pageIndicator":
+          return (
+            <span className="window-toolbar-indicator">
+              Page {Math.min(currentPage, pageCount)} of {pageCount}
+            </span>
+          );
+        default:
+          return <span />;
+      }
+    },
+    [
+      currentPage,
+      handleNextPage,
+      handlePrevPage,
+      handlePrint,
+      handleSave,
+      handleZoomIn,
+      handleZoomOut,
+      totalPages,
+    ],
+  );
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
 
   useEffect(() => {
     if (windowInstance.minimized) {
@@ -233,7 +456,6 @@ export default function Window({
       toggleMaximizeWindow(windowInstance.id);
 
       // After restoring, position window so cursor is over the titlebar area
-      // Titlebar is ~28px tall, so place window above cursor by half titlebar height
       const titlebarHeight = 28;
       const newWidth = windowInstance.previousRect.width;
       const newHeight = windowInstance.previousRect.height;
@@ -364,6 +586,78 @@ export default function Window({
     windowInstance.size.width,
   ]);
 
+  const contentProps = {
+    windowId: windowInstance.id,
+    windowType: windowInstance.type,
+    onZoomIn: handleZoomIn,
+    onZoomOut: handleZoomOut,
+    onPrevPage: handlePrevPage,
+    onNextPage: handleNextPage,
+    onSave: handleSave,
+    onPrint: handlePrint,
+    currentZoom,
+    currentPage,
+    totalPages,
+    onTotalPagesChange: handleTotalPagesChange,
+  };
+
+  const toolbarElement =
+    hasToolbar && toolbarTools.length > 0 ? (
+      <div className="window-toolbar" role="toolbar" aria-label="Window tools">
+        {toolbarTools.map((tool, index) => {
+          const previousTool = index > 0 ? toolbarTools[index - 1] : null;
+          const shouldRenderDivider = shouldRenderToolbarDivider(
+            previousTool,
+            tool,
+          );
+
+          return (
+            <div
+              key={`${windowInstance.id}-${tool}-${index}`}
+              className="window-toolbar-item"
+            >
+              {shouldRenderDivider ? (
+                <span className="window-toolbar-divider" aria-hidden="true" />
+              ) : null}
+              {renderToolbarTool(tool)}
+            </div>
+          );
+        })}
+      </div>
+    ) : null;
+
+  const addressBarElement =
+    hasAddressBar && addressBarConfig !== undefined ? (
+      <div className="window-address-bar" aria-label="Window address bar">
+        <span className="window-address-bar-label">Address</span>
+        <div className="window-address-bar-input">
+          <Image
+            src={registryEntry?.iconPath ?? "/assets/xp-icons/user.webp"}
+            alt=""
+            width={16}
+            height={16}
+            className="window-address-bar-icon"
+            aria-hidden="true"
+          />
+          <span className="window-address-bar-path">
+            {addressBarConfig.path}
+          </span>
+        </div>
+        {addressBarConfig.showGoButton ? (
+          <button
+            type="button"
+            className="window-address-bar-go"
+            onClick={(event) => {
+              event.preventDefault();
+            }}
+            aria-label="Go button placeholder"
+          >
+            <span aria-hidden="true">Go</span>
+          </button>
+        ) : null}
+      </div>
+    ) : null;
+
   if (!windowInstance.isMinimizing && windowInstance.minimized) {
     return null;
   }
@@ -377,7 +671,7 @@ export default function Window({
   if (isMobile) {
     return (
       <div
-        className="window-mobile-modal"
+        className={`window-mobile-modal ${showFadeIn ? "fade-in" : ""} ${isClosing ? "fade-out" : ""}`}
         onMouseDown={handleWindowMouseDown}
         role="dialog"
         aria-modal="true"
@@ -397,11 +691,8 @@ export default function Window({
           </div>
           <button
             type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              closeWindow(windowInstance.id);
-            }}
-            className="window-control-button"
+            onClick={handleClose}
+            className="window-control-button transition-hover"
             aria-label="Close window"
           >
             <Image
@@ -413,13 +704,6 @@ export default function Window({
               className="window-control-icon"
             />
           </button>
-        </div>
-        <div className="window-menubar" role="toolbar" aria-label="Window menu">
-          {WINDOW_MENU_ITEMS.map((item) => (
-            <button key={item} type="button" className="window-menu-item">
-              {item}
-            </button>
-          ))}
           <div className="ml-auto bg-[#fafafa] h-full px-4 flex items-center">
             <Image
               width={18}
@@ -429,12 +713,12 @@ export default function Window({
             />
           </div>
         </div>
+
+        {toolbarElement}
+        {addressBarElement}
+
         <div className="window-content-area">
-          <ContentComponent
-            windowId={windowInstance.id}
-            windowType={windowInstance.type}
-            isMobile
-          />
+          <ContentComponent {...contentProps} isMobile />
         </div>
       </div>
     );
@@ -442,7 +726,7 @@ export default function Window({
 
   return (
     <div
-      className={`winxp-window ${isActive ? "winxp-window-active" : "winxp-window-inactive"}`}
+      className={`winxp-window ${showFadeIn ? "fade-in" : ""} ${isClosing ? "fade-out" : ""} ${isActive ? "winxp-window-active" : "winxp-window-inactive"}`}
       onMouseDown={handleWindowMouseDown}
       style={{
         width: `${windowInstance.size.width}px`,
@@ -475,11 +759,11 @@ export default function Window({
         <div className="window-controls">
           <button
             type="button"
-            className="window-control-button"
             onClick={(event) => {
               event.stopPropagation();
               minimizeWindow(windowInstance.id);
             }}
+            className="window-control-button transition-hover"
             aria-label="Minimize window"
           >
             <Image
@@ -493,11 +777,11 @@ export default function Window({
           </button>
           <button
             type="button"
-            className="window-control-button"
             onClick={(event) => {
               event.stopPropagation();
               toggleMaximizeWindow(windowInstance.id);
             }}
+            className="window-control-button transition-hover"
             aria-label={
               windowInstance.maximized ? "Restore window" : "Maximize window"
             }
@@ -513,11 +797,8 @@ export default function Window({
           </button>
           <button
             type="button"
+            onClick={handleClose}
             className="window-control-button"
-            onClick={(event) => {
-              event.stopPropagation();
-              closeWindow(windowInstance.id);
-            }}
             aria-label="Close window"
           >
             <Image
@@ -537,7 +818,7 @@ export default function Window({
           <button
             key={item}
             type="button"
-            className="window-menu-item justify-evenly"
+            className="window-menu-item transition-hover"
           >
             {item}
           </button>
@@ -552,12 +833,11 @@ export default function Window({
         </div>
       </div>
 
+      {toolbarElement}
+      {addressBarElement}
+
       <div className="window-content-area">
-        <ContentComponent
-          windowId={windowInstance.id}
-          windowType={windowInstance.type}
-          isMobile={false}
-        />
+        <ContentComponent {...contentProps} isMobile={false} />
       </div>
 
       {windowInstance.resizable && !windowInstance.maximized ? (

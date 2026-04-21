@@ -240,9 +240,14 @@ export function WindowManagerProvider({
       }
 
       const persistedGeometry = loadFromStorage(windowType);
-      const initialSize = persistedGeometry?.size ?? registryEntry.defaultSize;
+      const initialSize =
+        persistedGeometry !== null && !registryEntry.enforceDefaultSizeOnOpen
+          ? persistedGeometry.size
+          : registryEntry.defaultSize;
       const initialPosition =
-        persistedGeometry?.position ?? getCenteredPosition(initialSize);
+        persistedGeometry !== null && !registryEntry.enforceDefaultSizeOnOpen
+          ? persistedGeometry.position
+          : getCenteredPosition(initialSize);
 
       const windowId = makeWindowId(windowType);
       const nextZIndex = zIndexCounterRef.current++;

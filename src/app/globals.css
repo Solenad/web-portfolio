@@ -205,11 +205,19 @@ body {
   color: #000000;
   font-size: 11px;
   line-height: 1;
+  transition:
+    background 150ms ease-in-out,
+    color 150ms ease-in-out;
 }
 
 .window-menu-item:hover {
   background: #316ac5;
   color: #ffffff;
+}
+
+.window-menu-item:active {
+  background: #1e4a8f;
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.3);
 }
 
 .window-menu-item:focus-visible {
@@ -223,6 +231,181 @@ body {
   border-top: 1px solid #dbd5d5;
   border-bottom: 1px solid #2349c1;
   background: #ffffff;
+}
+
+.window-toolbar {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  border-top: 1px solid #ffffff;
+  border-bottom: 1px solid #b8b3a3;
+  padding-right: 6px;
+  padding-left: 6px;
+  background: linear-gradient(180deg, #f7f7f2 0%, #ece9d8 60%, #e3decb 100%);
+}
+
+.window-toolbar-item {
+  display: flex;
+}
+
+.window-toolbar-divider {
+  display: inline-block;
+  height: 100%;
+  width: 1px;
+  margin: 0 4px;
+  background: linear-gradient(180deg, #fefefe 0%, #a8a08d 100%);
+}
+
+.window-toolbar-button {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  padding: 5px 4px;
+  background: transparent;
+  color: #0f2648;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background 150ms ease-in-out,
+    border 150ms ease-in-out,
+    box-shadow 150ms ease-in-out;
+}
+
+.window-toolbar-button-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.window-toolbar-button:hover:not(:disabled) {
+  border: 1px solid #bababa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.window-toolbar-button:active:not(:disabled),
+.window-toolbar-button-active {
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+}
+
+.window-toolbar-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.window-toolbar-indicator {
+  min-width: 94px;
+  color: #132f54;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.window-address-bar {
+  display: flex;
+  min-height: 29px;
+  align-items: center;
+  gap: 5px;
+  border-top: 1px solid #f9f8f1;
+  border-bottom: 1px solid #b6af9e;
+  padding: 3px 6px;
+  background: #ece9d8;
+}
+
+.window-address-bar-label {
+  color: #1d3557;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.window-address-bar-input {
+  display: flex;
+  min-height: 22px;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #7f9db9;
+  border-radius: 1px;
+  padding: 0 6px;
+  background: #ffffff;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.window-address-bar-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.window-address-bar-path {
+  overflow: hidden;
+  color: #1d3557;
+  font-size: 11px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.window-address-bar-go {
+  min-height: 22px;
+  min-width: 34px;
+  border: 1px solid #6e8dc5;
+  border-radius: 2px;
+  padding: 0 6px;
+  background: linear-gradient(180deg, #eff6ff 0%, #cfe0fb 100%);
+  color: #0f3f81;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.window-address-bar-go:hover {
+  filter: brightness(1.06);
+}
+
+.window-pdf-viewer {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: #eef3fb;
+}
+
+.window-pdf-scroll-region {
+  flex: 1;
+  overflow: auto;
+  padding: 12px;
+}
+
+.window-pdf-scroll-region .react-pdf__Document {
+  display: flex;
+  justify-content: center;
+}
+
+.window-pdf-scroll-region .react-pdf__Page {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.24);
+}
+
+.window-pdf-loading {
+  margin: 14px auto;
+  width: fit-content;
+  border: 1px solid #c6cfde;
+  background: #ffffff;
+  padding: 6px 10px;
+  color: #1d3153;
+  font-size: 12px;
+}
+
+.window-pdf-error {
+  margin: 12px 12px 0;
+  border: 1px solid #c7b7b7;
+  background: #fff4f4;
+  padding: 10px;
+  color: #5a2323;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .window-resize-handle {
@@ -308,6 +491,7 @@ body {
 }
 
 .winxp-taskbar-button {
+  position: relative;
   display: inline-flex;
   height: 25px;
   min-width: 150px;
@@ -320,27 +504,87 @@ body {
   color: #ffffff;
   font-size: 11px;
   text-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
-  background: linear-gradient(180deg, #3ba0e7 0, #3295eb 50%, #3389d4);
+  overflow: hidden;
+  z-index: 1;
+  background-image: linear-gradient(180deg, #3ba0e7 0, #3295eb 50%, #3389d4);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 150ms ease-in-out;
 }
 
-.winxp-taskbar-button-idle {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 1px 2px rgba(0, 0, 0, 0.25);
+.winxp-taskbar-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(180deg, #5ab4f0 0, #4da8ed 50%, #4e9dd6);
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
+  z-index: -1;
+}
+
+.winxp-taskbar-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(180deg, #2a7bc4 0, #2472c0 50%, #2569ae);
+  opacity: 0;
+  transition: opacity 150ms ease-in-out;
+  z-index: -1;
+}
+
+.winxp-taskbar-button:hover:not(.winxp-taskbar-button-active)::before {
+  opacity: 1;
+}
+
+.winxp-taskbar-button-active::after {
+  opacity: 1;
 }
 
 .winxp-taskbar-button-active {
-  background: linear-gradient(180deg, #2a7bc4 0, #2472c0 50%, #2569ae);
   box-shadow:
     inset 0 2px 4px rgba(0, 0, 0, 0.4),
     inset 0 -1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.winxp-taskbar-button:hover:not(.winxp-taskbar-button-active) {
-  background: linear-gradient(180deg, #5ab4f0 0, #4da8ed 50%, #4e9dd6);
+/* Ensure content stays above the transition layers */
+.winxp-taskbar-button > * {
+  position: relative;
+  z-index: 2;
+  pointer-events: none; /* Helps prevent icon from intercepting hover */
+}
+
+/* Transition utility classes */
+.transition-hover {
+  transition:
+    background-color 150ms ease-in-out,
+    filter 150ms ease-in-out,
+    box-shadow 150ms ease-in-out,
+    transform 150ms ease-in-out;
+}
+
+/* Fade animations */
+.fade-in {
+  animation: fadeIn 150ms ease-in forwards;
+}
+.fade-out {
+  animation: fadeOut 150ms ease-out forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 .taskbar-button-icon {
   width: 16px;
