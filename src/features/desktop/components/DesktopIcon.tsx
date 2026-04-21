@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useState } from "react";
 import type { JSX } from "react";
 
+import type { WindowType } from "@/types/window.types";
+
 interface Props {
   label: string;
   iconName: string;
@@ -12,7 +14,7 @@ interface Props {
   onSelect: () => void;
   onOpen?: () => void;
   windowId?: string;
-  windowType?: string;
+  windowType?: WindowType;
 }
 
 export default function DesktopIcon({

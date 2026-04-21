@@ -1,4 +1,4 @@
-FROM node:20.18.3-alpine@sha256:7c32419b49a3e9f553aae62c576aacdd9367d0ef648eca025cbcabe9c6369b8e AS base
+FROM node:20-alpine AS base
 WORKDIR /app
 
 FROM base AS deps
@@ -13,7 +13,7 @@ RUN npm run build
 FROM base AS runner
 ENV NODE_ENV=production
 
-RUN apk add --no-cache wget=1.25.0-r0
+RUN apk add --no-cache wget
 
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
