@@ -150,7 +150,6 @@ export default function Window({
   const [dragState, setDragState] = useState<DragState | null>(null);
   const [resizeState, setResizeState] = useState<ResizeState | null>(null);
   const [currentZoom, setCurrentZoom] = useState<number>(1);
-  const [isFitWidth, setIsFitWidth] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
 
@@ -163,21 +162,15 @@ export default function Window({
   const contentComponent = registryEntry?.component ?? null;
 
   const handleZoomIn = useCallback((): void => {
-    setIsFitWidth(false);
     setCurrentZoom((previousZoom) => {
       return clampNumber(previousZoom + ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
     });
   }, []);
 
   const handleZoomOut = useCallback((): void => {
-    setIsFitWidth(false);
     setCurrentZoom((previousZoom) => {
       return clampNumber(previousZoom - ZOOM_STEP, MIN_ZOOM, MAX_ZOOM);
     });
-  }, []);
-
-  const handleFitWidth = useCallback((): void => {
-    setIsFitWidth(true);
   }, []);
 
   const handlePrevPage = useCallback((): void => {
@@ -226,17 +219,15 @@ export default function Window({
               className="window-toolbar-button"
               onClick={handleSave}
             >
-              <span className="window-toolbar-button-content">
-                <Image
-                  src="/assets/xp-icons/pdf.webp"
-                  alt=""
-                  width={14}
-                  height={14}
-                  className="window-toolbar-button-icon"
-                  aria-hidden="true"
-                />
-                <span>Save</span>
-              </span>
+              <Image
+                src="/assets/xp-icons/save.webp"
+                alt="Save Button"
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Save</span>
             </button>
           );
         case "zoomIn":
@@ -246,7 +237,15 @@ export default function Window({
               className="window-toolbar-button"
               onClick={handleZoomIn}
             >
-              Zoom +
+              <Image
+                src="/assets/xp-icons/zoomin.webp"
+                alt="Zoom In Button"
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Zoom In</span>
             </button>
           );
         case "zoomOut":
@@ -256,17 +255,15 @@ export default function Window({
               className="window-toolbar-button"
               onClick={handleZoomOut}
             >
-              Zoom -
-            </button>
-          );
-        case "fitWidth":
-          return (
-            <button
-              type="button"
-              className={`window-toolbar-button ${isFitWidth ? "window-toolbar-button-active" : ""}`}
-              onClick={handleFitWidth}
-            >
-              Fit Width
+              <Image
+                src="/assets/xp-icons/zoomout.webp"
+                alt="Zoom Out Button"
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Zoom Out</span>
             </button>
           );
         case "print":
@@ -276,17 +273,15 @@ export default function Window({
               className="window-toolbar-button"
               onClick={handlePrint}
             >
-              <span className="window-toolbar-button-content">
-                <Image
-                  src="/assets/xp-icons/my-computer.webp"
-                  alt=""
-                  width={14}
-                  height={14}
-                  className="window-toolbar-button-icon"
-                  aria-hidden="true"
-                />
-                <span>Print</span>
-              </span>
+              <Image
+                src="/assets/xp-icons/printer.webp"
+                alt=""
+                width={24}
+                height={24}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>Print</span>
             </button>
           );
         case "prevPage":
@@ -323,14 +318,12 @@ export default function Window({
     },
     [
       currentPage,
-      handleFitWidth,
       handleNextPage,
       handlePrevPage,
       handlePrint,
       handleSave,
       handleZoomIn,
       handleZoomOut,
-      isFitWidth,
       totalPages,
     ],
   );
@@ -441,7 +434,6 @@ export default function Window({
       toggleMaximizeWindow(windowInstance.id);
 
       // After restoring, position window so cursor is over the titlebar area
-      // Titlebar is ~28px tall, so place window above cursor by half titlebar height
       const titlebarHeight = 28;
       const newWidth = windowInstance.previousRect.width;
       const newHeight = windowInstance.previousRect.height;
@@ -577,7 +569,6 @@ export default function Window({
     windowType: windowInstance.type,
     onZoomIn: handleZoomIn,
     onZoomOut: handleZoomOut,
-    onFitWidth: handleFitWidth,
     onPrevPage: handlePrevPage,
     onNextPage: handleNextPage,
     onSave: handleSave,
@@ -585,7 +576,6 @@ export default function Window({
     currentZoom,
     currentPage,
     totalPages,
-    isFitWidth,
     onTotalPagesChange: handleTotalPagesChange,
   };
 
@@ -627,7 +617,9 @@ export default function Window({
             className="window-address-bar-icon"
             aria-hidden="true"
           />
-          <span className="window-address-bar-path">{addressBarConfig.path}</span>
+          <span className="window-address-bar-path">
+            {addressBarConfig.path}
+          </span>
         </div>
         {addressBarConfig.showGoButton ? (
           <button
