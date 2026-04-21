@@ -86,10 +86,13 @@ export default function ResumeWindow({
     [onTotalPagesChange],
   );
 
-  const handleLoadError = useCallback((errorMessage: string): void => {
-    setLoadError(errorMessage);
-    onTotalPagesChange?.(0);
-  }, [onTotalPagesChange]);
+  const handleLoadError = useCallback(
+    (errorMessage: string): void => {
+      setLoadError(errorMessage);
+      onTotalPagesChange?.(0);
+    },
+    [onTotalPagesChange],
+  );
 
   const boundedPage = clampPage(resolvedPage, 1, Math.max(1, totalPages ?? 1));
 
@@ -100,7 +103,9 @@ export default function ResumeWindow({
           <h2 className="text-[14px] font-bold">Resume PDF not available</h2>
           <p>Unable to load `{RESUME_PDF_PATH}`.</p>
           <p>Place `resume.pdf` in `public/assets/` and reload the page.</p>
-          <p className="text-[11px] text-[#4b5a74]">Technical details: {loadError}</p>
+          <p className="text-[11px] text-[#4b5a74]">
+            Technical details: {loadError}
+          </p>
         </div>
       ) : null}
 

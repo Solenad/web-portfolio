@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, JSX, MouseEvent as ReactMouseEvent } from "react";
 
 import { getRegistryEntry } from "@/hooks/useWindowRegistry";
@@ -152,6 +152,10 @@ export default function Window({
   const [currentZoom, setCurrentZoom] = useState<number>(1);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [isClosing, setIsClosing] = useState(false);
+  const isFirstRender = useRef(true);
+
+  const showFadeIn = isFirstRender.current && !windowInstance.isRestoring;
 
   const registryEntry = getRegistryEntry(windowInstance.type);
   const hasToolbar = registryEntry?.hasToolbar ?? false;
@@ -207,6 +211,20 @@ export default function Window({
     });
   }, []);
 
+  const handleClose = useCallback(
+    (event: ReactMouseEvent<HTMLButtonElement>): void => {
+      event.stopPropagation();
+      if (isClosing) {
+        return;
+      }
+      setIsClosing(true);
+      setTimeout(() => {
+        closeWindow(windowInstance.id);
+      }, 150);
+    },
+    [closeWindow, windowInstance.id, isClosing],
+  );
+
   const renderToolbarTool = useCallback(
     (tool: ToolType): JSX.Element => {
       const pageCount = Math.max(totalPages, 1);
@@ -216,7 +234,7 @@ export default function Window({
           return (
             <button
               type="button"
-              className="window-toolbar-button"
+              className="window-toolbar-button transition-hover"
               onClick={handleSave}
             >
               <Image
@@ -234,7 +252,7 @@ export default function Window({
           return (
             <button
               type="button"
-              className="window-toolbar-button"
+              className="window-toolbar-button transition-hover"
               onClick={handleZoomIn}
             >
               <Image
@@ -252,7 +270,7 @@ export default function Window({
           return (
             <button
               type="button"
-              className="window-toolbar-button"
+              className="window-toolbar-button transition-hover"
               onClick={handleZoomOut}
             >
               <Image
@@ -270,7 +288,7 @@ export default function Window({
           return (
             <button
               type="button"
-              className="window-toolbar-button"
+              className="window-toolbar-button transition-hover"
               onClick={handlePrint}
             >
               <Image
@@ -288,7 +306,7 @@ export default function Window({
           return (
             <button
               type="button"
-              className="window-toolbar-button"
+              className="window-toolbar-button transition-hover"
               onClick={handlePrevPage}
               disabled={currentPage <= 1}
             >
@@ -299,7 +317,7 @@ export default function Window({
           return (
             <button
               type="button"
-              className="window-toolbar-button"
+              className="window-toolbar-button transition-hover"
               onClick={handleNextPage}
               disabled={currentPage >= pageCount}
             >
@@ -327,6 +345,10 @@ export default function Window({
       totalPages,
     ],
   );
+
+  useEffect(() => {
+    isFirstRender.current = false;
+  }, []);
 
   useEffect(() => {
     if (windowInstance.minimized) {
@@ -649,7 +671,7 @@ export default function Window({
   if (isMobile) {
     return (
       <div
-        className="window-mobile-modal"
+        className={`window-mobile-modal ${showFadeIn ? "fade-in" : ""} ${isClosing ? "fade-out" : ""}`}
         onMouseDown={handleWindowMouseDown}
         role="dialog"
         aria-modal="true"
@@ -669,11 +691,8 @@ export default function Window({
           </div>
           <button
             type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              closeWindow(windowInstance.id);
-            }}
-            className="window-control-button"
+            onClick={handleClose}
+            className="window-control-button transition-hover"
             aria-label="Close window"
           >
             <Image
@@ -685,13 +704,6 @@ export default function Window({
               className="window-control-icon"
             />
           </button>
-        </div>
-        <div className="window-menubar" role="toolbar" aria-label="Window menu">
-          {WINDOW_MENU_ITEMS.map((item) => (
-            <button key={item} type="button" className="window-menu-item">
-              {item}
-            </button>
-          ))}
           <div className="ml-auto bg-[#fafafa] h-full px-4 flex items-center">
             <Image
               width={18}
@@ -714,7 +726,7 @@ export default function Window({
 
   return (
     <div
-      className={`winxp-window ${isActive ? "winxp-window-active" : "winxp-window-inactive"}`}
+      className={`winxp-window ${showFadeIn ? "fade-in" : ""} ${isClosing ? "fade-out" : ""} ${isActive ? "winxp-window-active" : "winxp-window-inactive"}`}
       onMouseDown={handleWindowMouseDown}
       style={{
         width: `${windowInstance.size.width}px`,
@@ -747,11 +759,11 @@ export default function Window({
         <div className="window-controls">
           <button
             type="button"
-            className="window-control-button"
             onClick={(event) => {
               event.stopPropagation();
               minimizeWindow(windowInstance.id);
             }}
+            className="window-control-button transition-hover"
             aria-label="Minimize window"
           >
             <Image
@@ -765,11 +777,11 @@ export default function Window({
           </button>
           <button
             type="button"
-            className="window-control-button"
             onClick={(event) => {
               event.stopPropagation();
               toggleMaximizeWindow(windowInstance.id);
             }}
+            className="window-control-button transition-hover"
             aria-label={
               windowInstance.maximized ? "Restore window" : "Maximize window"
             }
@@ -785,11 +797,8 @@ export default function Window({
           </button>
           <button
             type="button"
+            onClick={handleClose}
             className="window-control-button"
-            onClick={(event) => {
-              event.stopPropagation();
-              closeWindow(windowInstance.id);
-            }}
             aria-label="Close window"
           >
             <Image
@@ -806,7 +815,11 @@ export default function Window({
 
       <div className="window-menubar" role="toolbar" aria-label="Window menu">
         {WINDOW_MENU_ITEMS.map((item) => (
-          <button key={item} type="button" className="window-menu-item">
+          <button
+            key={item}
+            type="button"
+            className="window-menu-item transition-hover"
+          >
             {item}
           </button>
         ))}
