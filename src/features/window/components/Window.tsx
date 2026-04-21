@@ -154,8 +154,9 @@ export default function Window({
   const [totalPages, setTotalPages] = useState<number>(0);
   const [isClosing, setIsClosing] = useState(false);
   const isFirstRender = useRef(true);
-
+  /* eslint-disable */
   const showFadeIn = isFirstRender.current && !windowInstance.isRestoring;
+  /* eslint-enable */
 
   const registryEntry = getRegistryEntry(windowInstance.type);
   const hasToolbar = registryEntry?.hasToolbar ?? false;
