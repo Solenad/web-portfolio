@@ -34,7 +34,7 @@ A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop in
 
 ## 🚀 Live Demo
 
-Visit the portfolio at: [your-deployment-url]
+Visit the portfolio at: [https://portfolio.rohann.qzz.io/](https://portfolio.rohann.qzz.io/)
 
 ## 🛠️ Technology Stack
 
