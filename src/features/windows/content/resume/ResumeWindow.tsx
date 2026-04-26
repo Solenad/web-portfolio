@@ -7,7 +7,7 @@ import type { JSX } from "react";
 import type { WindowContentProps } from "@/types/window.types";
 
 const ResumePdfViewer = dynamic(
-  () => import("@/features/window/components/content/ResumePdfViewer"),
+  () => import("@/features/windows/content/resume/ResumePdfViewer"),
   {
     ssr: false,
     loading: () => <p className="window-pdf-loading">Loading resume PDF...</p>,

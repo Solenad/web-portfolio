@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef } from "react";
 import type { JSX } from "react";
 
-import { getRegistryEntry } from "@/hooks/useWindowRegistry";
-import { useWindowManager } from "@/hooks/useWindowManager";
+import { getRegistryEntry } from "@/features/windows/hooks/useWindowRegistry";
+import { useWindowManager } from "@/features/windows/hooks/useWindowManager";
 import type { WindowInstance } from "@/types/window.types";
 
 interface Props {
