@@ -1,16 +1,17 @@
-#  windows-xp-web-portfolio
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
-![GitHub last commit](https://img.shields.io/github/last-commit/Solenad/web-portfolio)
-![visitors](https://visitor-badge.laobi.icu/badge?page_id=Solenad.web-portfolio.id)
+# windows-xp-web-portfolio
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Solenad/web-portfolio)
+[![visitors](https://visitor-badge.laobi.icu/badge?page_id=Solenad.web-portfolio.id)
 
-A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop interface. Built with modern web technologies while capturing the nostalgic essence of the classic operating system.
+Retro Windows XP Luna desktop as web portfolio. Modern stack, nostalgic UI.
 
-<img width="1918" height="943" alt="Webpage" src="https://github.com/user-attachments/assets/e58b1735-6b6c-400d-aaff-feb195548800" />
+<img width="1919" height="1033" alt="image" src="https://github.com/user-attachments/assets/a6f7f44b-90fa-4d57-9305-efcd1a90dee3" />
 
 ## ✨ Features
 
 ### Desktop Environment
+
 - **Authentic Windows XP Taskbar** - 17-stop gradient with Luna blue theme
 - **Start Button** - Pixel-perfect image assets with hover and active states
 - **System Tray** - Security and info icons with live clock (updates every second)
@@ -18,6 +19,7 @@ A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop in
 - **Bliss Wallpaper** - Classic Windows XP background
 
 ### Interaction Model
+
 - **Single-Selection Icons** - Click to select, click another to deselect previous
 - **Wallpaper Click** - Click on empty desktop to deselect all icons
 - **Hover States** - Translucent blue highlight (no borders/shadows)
@@ -29,12 +31,13 @@ A retro-inspired web portfolio featuring an authentic Windows XP Luna desktop in
 - **Resume PDF Viewer** - In-window PDF rendering with XP toolbar (save/zoom/print/page nav) and address bar
 
 ### Responsive Design
+
 - **Desktop View** - Full XP desktop experience with multi-window interactions (768px and above)
 - **Mobile Fallback** - Full-screen modal window for the active app (drag/resize disabled)
 
 ## 🚀 Live Demo
 
-Visit the portfolio at: [your-deployment-url]
+Visit the portfolio at: [https://portfolio.rohann.qzz.io/](https://portfolio.rohann.qzz.io/)
 
 ## 🛠️ Technology Stack
 
@@ -48,35 +51,42 @@ Visit the portfolio at: [your-deployment-url]
 
 ```
 web-portfolio/
-├── app/
-│   ├── layout.tsx          # Root layout with fonts
-│   ├── page.tsx            # Desktop entry point
-│   ├── globals.css         # Global styles & Tailwind v4 config
-│   └── favicon.ico
-├── features/
-│   ├── desktop/
-│   │   ├── components/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Root layout with fonts
+│   │   ├── page.tsx            # Desktop entry point
+│   │   ├── globals.css        # Global styles & Tailwind v4
+│   │   └── favicon.ico
+│   ├── features/
+│   │   ├── desktop/components/
 │   │   │   ├── Desktop.tsx      # Desktop container with state management
 │   │   │   ├── IconGrid.tsx     # Vertical column grid layout
 │   │   │   ├── DesktopIcon.tsx  # 72×72 icons with XP styling
 │   │   │   └── Wallpaper.tsx    # Bliss background
-│   │   └── index.ts
-│   └── taskbar/
-│       └── components/
-│           ├── Taskbar.tsx      # 17-stop gradient taskbar
-│           ├── StartButton.tsx  # Image-based start button
-│           └── SystemTray.tsx   # Clock and status icons
-├── types/
-│   └── desktop.types.ts    # DesktopIconItem type definition
-├── public/
-│   └── assets/
-│       ├── xp-icons/       # Desktop icons (user.webp, mail.webp, etc.)
-│       └── wallpapers/     # Bliss.jpg background
+│   │   ├── taskbar/components/
+│   │   │   ├── Taskbar.tsx      # 17-stop gradient taskbar
+│   │   │   ├── StartButton.tsx  # Image-based start button
+│   │   │   └── SystemTray.tsx   # Clock and status icons
+│   │   └── windows/
+│   │       ├── hooks/
+│   │       │   ├── useWindowRegistry.ts
+│   │       │   └── useWindowManager.tsx
+│   │       └── content/        # Window content components
+│   │           ├── about/
+│   │           ├── projects/
+│   │           ├── contact/
+│   │           ├── resume/
+│   │           ├── minesweeper/
+│   │           ├── paint/
+│   │           └── doom/
+│   └── types/
+│       ├── desktop.types.ts    # DesktopIconItem type definition
+│       └── window.types.ts     # Window state types
+├── public/assets/
+│   ├── xp-icons/            # Desktop icons (*.webp)
+│   └── wallpapers/          # Bliss.jpg background
 ├── openspec/
 │   └── specs/              # Feature specifications
-│       ├── desktop-icon-grid/
-│       ├── desktop-icon-interactions/
-│       └── taskbar-component/
 ├── next.config.ts
 ├── tsconfig.json
 ├── eslint.config.mjs
@@ -87,6 +97,7 @@ web-portfolio/
 ## 🎨 Design System
 
 ### Windows XP Luna Colors
+
 - Primary Blue: `#235cdb`
 - Taskbar Gradient: 17-stop linear gradient from `rgb(31, 47, 134)` to `rgb(25, 65, 165)`
 - Tray Gradient: Lighter blue subset with lifted appearance
@@ -94,11 +105,13 @@ web-portfolio/
 - Selection Blue (selected): `rgba(30, 80, 160, 0.4)`
 
 ### Typography
+
 - **Font Stack:** Tahoma, "Trebuchet MS", Verdana, sans-serif
 - **Desktop Icons:** 12px with subtle text shadow (0px 1px 2px rgba(0,0,0,0.8))
 - **Clock:** 11px semibold with text shadow
 
 ### Icon Styling
+
 - Icon Size: 72×72 pixels
 - Label: White text, subtle shadow (no heavy black border)
 - Hover: Translucent blue background, no borders/gradients/shadows
@@ -108,41 +121,46 @@ web-portfolio/
 ## 🚦 Getting Started
 
 ### Prerequisites
+
 - Node.js 20.x or later
 - npm package manager
 
 ### Installation
 
 1. Clone the repository:
+
 ```bash
-git clone https://github.com/yourusername/web-portfolio.git
+git clone https://github.com/Solenad/web-portfolio.git
 cd web-portfolio
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
 
-4. Open http://localhost:3000 in your browser
+Open http://localhost:3000 in your browser.
 
 ### Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server with hot reload |
-| `npm run build` | Create production build |
-| `npm start` | Start production server (requires build) |
-| `npm run lint` | Run ESLint checks |
+| Command         | Description                              |
+| --------------- | ---------------------------------------- |
+| `npm run dev`   | Start development server with hot reload |
+| `npm run build` | Create production build                  |
+| `npm start`     | Start production server (requires build) |
+| `npm run lint`  | Run ESLint checks                        |
 
 ## 🏗️ Current Implementation Status
 
 ### ✅ Completed Features
+
 - [x] Windows XP Luna taskbar with authentic gradient
 - [x] Start button with hover and active image states
 - [x] System tray with security/info icons and live clock
@@ -161,6 +179,7 @@ npm run dev
 - [x] Authentic XP text styling (subtle shadow, no black border)
 
 ### 📝 Future Enhancements
+
 - [ ] Start menu with program list
 - [ ] Right-click context menus
 - [ ] Additional desktop icons with deeper app content
@@ -175,48 +194,20 @@ Instead of traditional page navigation, this portfolio uses the Windows XP deskt
 - **Selection** mimics XP's translucent blue highlight
 - **Double-click** opens content in draggable XP windows
 
-## 🪟 Window System Notes
+## 🪟 Window System
 
-### Registry-Driven Window Types
+Window config centralized in `src/features/windows/hooks/useWindowRegistry.ts`.
 
-Window configuration is centralized in `src/hooks/useWindowRegistry.ts`.
-Each `windowType` maps to:
-- title
-- icon metadata (`iconName`, `iconPath`)
-- content component
-- default size
-- minimum size
-- `resizable` flag
-- optional toolbar and address-bar config
-
-Current types:
-- `about`
-- `projects`
-- `contact`
-- `resume`
-- `minesweeper` (fixed-size)
-- `paint`
-- `doom`
+Current types: `about`, `projects`, `contact`, `resume`, `minesweeper` (fixed), `paint`, `doom`
 
 ### Persistence Keys
 
-Window geometry persists in localStorage using these keys:
 - `window:<type>:position`
 - `window:<type>:size`
 
-Examples:
-- `window:projects:position`
-- `window:projects:size`
+### Resume PDF
 
-This creates an immersive, nostalgic experience that stands out from conventional portfolio designs.
-
-### Resume PDF Asset Requirement
-
-The enhanced Resume window expects `public/assets/resume.pdf`.
-
-- If the file exists, the resume renders inline through `react-pdf`.
-- If the file is missing, the window shows a friendly fallback message.
-- Toolbar/go controls currently use text placeholders so you can replace them with final image assets later.
+Place `public/assets/resume.pdf`. Missing → fallback message shown.
 
 ## 🤝 Contributing
 
@@ -233,7 +224,3 @@ This project is open source. The Windows XP visual elements are used for educati
 - Inspired by the nostalgia of classic Windows interfaces
 
 ---
-
-**Built with ❤️ by Rohann Dizon**
-
-*"Backend-first developer building high-scale university platforms"*
