@@ -7,11 +7,11 @@ import IconGrid from "@/features/desktop/components/IconGrid";
 import Wallpaper from "@/features/desktop/components/Wallpaper";
 import Taskbar from "@/features/taskbar/components/Taskbar";
 import Window from "@/features/window/components/Window";
-import { getDesktopIcons } from "@/hooks/useWindowRegistry";
+import { getDesktopIcons } from "@/features/windows/hooks/useWindowRegistry";
 import {
   WindowManagerProvider,
   useWindowManager,
-} from "@/hooks/useWindowManager";
+} from "@/features/windows/hooks/useWindowManager";
 
 const MOBILE_BREAKPOINT = 768;
 

@@ -4,8 +4,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties, JSX, MouseEvent as ReactMouseEvent } from "react";
 
-import { getRegistryEntry } from "@/hooks/useWindowRegistry";
-import { useWindowManager } from "@/hooks/useWindowManager";
+import { getRegistryEntry } from "@/features/windows/hooks/useWindowRegistry";
+import { useWindowManager } from "@/features/windows/hooks/useWindowManager";
 import type {
   ToolType,
   WindowInstance,

@@ -2,10 +2,10 @@
 
 import type { JSX } from "react";
 
-import StartButton from "@/features/taskbar/components/StartButton";
+import StartButton from "@/features/taskbar/components/start-button/StartButton";
 import SystemTray from "@/features/taskbar/components/SystemTray";
 import TaskbarButton from "@/features/taskbar/components/TaskbarButton";
-import { useWindowManager } from "@/hooks/useWindowManager";
+import { useWindowManager } from "@/features/windows/hooks/useWindowManager";
 
 interface Props {
   onStartClick: () => void;

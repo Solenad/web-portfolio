@@ -1,10 +1,10 @@
-import AboutWindow from "@/features/window/components/content/AboutWindow";
-import ContactWindow from "@/features/window/components/content/ContactWindow";
-import DoomWindow from "@/features/window/components/content/DoomWindow";
-import MinesweeperWindow from "@/features/window/components/content/MinesweeperWindow";
-import PaintWindow from "@/features/window/components/content/PaintWindow";
-import ProjectsWindow from "@/features/window/components/content/ProjectsWindow";
-import ResumeWindow from "@/features/window/components/content/ResumeWindow";
+import AboutWindow from "@/features/windows/content/about/AboutWindow";
+import ContactWindow from "@/features/windows/content/contact/ContactWindow";
+import DoomWindow from "@/features/windows/content/doom/DoomWindow";
+import MinesweeperWindow from "@/features/windows/content/minesweeper/MinesweeperWindow";
+import PaintWindow from "@/features/windows/content/paint/PaintWindow";
+import ProjectsWindow from "@/features/windows/content/projects/ProjectsWindow";
+import ResumeWindow from "@/features/windows/content/resume/ResumeWindow";
 import type { DesktopIconItem } from "@/types/desktop.types";
 import type {
   AddressBarConfig,

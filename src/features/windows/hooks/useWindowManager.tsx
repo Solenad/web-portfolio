@@ -11,7 +11,7 @@ import {
 } from "react";
 import type { JSX, MutableRefObject, ReactNode } from "react";
 
-import { getRegistryEntry } from "@/hooks/useWindowRegistry";
+import { getRegistryEntry } from "@/features/windows/hooks/useWindowRegistry";
 import type {
   PersistedWindowGeometry,
   WindowBounds,
