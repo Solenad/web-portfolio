@@ -331,6 +331,44 @@ export default function Window({
               Page {Math.min(currentPage, pageCount)} of {pageCount}
             </span>
           );
+        case "github":
+          return (
+            <a
+              href="https://github.com/rohanndizon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="window-toolbar-button transition-hover"
+            >
+              <Image
+                src="/assets/xp-icons/folder-closed.webp"
+                alt=""
+                width={20}
+                height={20}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>GitHub</span>
+            </a>
+          );
+        case "linkedin":
+          return (
+            <a
+              href="https://linkedin.com/in/rohanndizon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="window-toolbar-button transition-hover"
+            >
+              <Image
+                src="/assets/xp-icons/user.webp"
+                alt=""
+                width={20}
+                height={20}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>LinkedIn</span>
+            </a>
+          );
         default:
           return <span />;
       }
