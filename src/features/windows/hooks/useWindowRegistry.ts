@@ -43,6 +43,7 @@ const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
     hasToolbar: true,
     hasAddressBar: false,
     toolbarTools: ABOUT_TOOLBAR_TOOLS,
+    enforceDefaultSizeOnOpen: true,
   },
   projects: {
     title: "Projects",
