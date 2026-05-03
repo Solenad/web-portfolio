@@ -57,7 +57,7 @@ export default function DesktopIcon({
             alt={`${label} icon`}
             width={72}
             height={72}
-            className=" h-[72px] w-[72px]"
+            className="h-[72px] w-[72px]"
             onError={() => setImageFailed(true)}
           />
         ) : (
