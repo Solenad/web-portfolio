@@ -19,7 +19,7 @@ function Photo({
 }: PhotoProps) {
   const frameClass =
     variant === "portrait"
-      ? "winxp-raised border-4 border-white p-2 scale-110 z-10 shadow-xl"
+      ? "winxp-raised border-4 border-white p-2 scale-110 z-10 shadow-xl hover:scale-120 transition-transform duration-300"
       : "winxp-raised border-2 border-white p-1 shadow-md hover:scale-105 transition-transform duration-300";
 
   return (
@@ -84,12 +84,27 @@ function AboutSection({
 }
 
 const techBadges = [
-  { icon: "⚛", label: "React", url: "https://react.dev", color: "#61DAFB" },
+  { icon: "⚛", label: "React", url: "https://react.dev", color: "#2D9CD9" },
   { icon: "▲", label: "Next.js", url: "https://nextjs.org", color: "#000000" },
-  { icon: "TS", label: "TypeScript", url: "https://www.typescriptlang.org", color: "#3178C6" },
-  { icon: "🐘", label: "PostgreSQL", url: "https://www.postgresql.org", color: "#4169E1" },
+  {
+    icon: "TS",
+    label: "TypeScript",
+    url: "https://www.typescriptlang.org",
+    color: "#3178C6",
+  },
+  {
+    icon: "🐘",
+    label: "PostgreSQL",
+    url: "https://www.postgresql.org",
+    color: "#4169E1",
+  },
   { icon: "🟢", label: "Node.js", url: "https://nodejs.org", color: "#339933" },
-  { icon: "JS", label: "JavaScript", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", color: "#F7DF1E" },
+  {
+    icon: "JS",
+    label: "JavaScript",
+    url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    color: "#C4A600",
+  },
 ];
 
 function hexToRgba(hex: string, alpha: number): string {
@@ -123,20 +138,23 @@ export default function AboutWindow({
               Manila, Philippines
             </p>
             <p className="text-[11px] text-[#10233f]/60 mt-0.5">
-              3rd Year Computer Science @ DLSU
+              3rd Year Computer Science @ De La Salle University
             </p>
             <p className="text-[11px] text-[#10233f]/60">
               Software Developer Intern @ Siklab
             </p>
+            <p className="text-[11px] text-[#10233f]/60">
+              Tech Lead of Research and Development @ La Salle Computer Society
+            </p>
           </div>
-          <div className="grid grid-cols-2 gap-1.5 flex-shrink-0">
+          <div className="grid grid-cols-2 gap-2 flex-shrink-0">
             {techBadges.map((badge) => (
               <a
                 key={badge.label}
                 href={badge.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm border text-[10px] font-semibold transition-transform duration-150 hover:scale-110 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-sm border text-[11px] font-semibold transition-transform duration-150 hover:scale-110 whitespace-nowrap"
                 style={{
                   borderColor: badge.color,
                   color: badge.color,
@@ -160,13 +178,13 @@ export default function AboutWindow({
             <div className="relative w-full max-w-sm flex items-center justify-center">
               <Photo
                 variant="portrait"
-                className="w-64 h-80 rotate-[-1deg]"
+                className="w-84 h-100 rotate-[-1deg]"
                 src="/assets/about-me/roe1.webp"
                 alt="Roe Portrait 1"
               />
               <Photo
                 variant="hobby"
-                className="absolute -bottom-10 -right-4 w-32 h-32 rotate-[4deg] hidden md:flex z-20"
+                className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[4deg] hidden md:flex z-20"
                 src="/assets/about-me/roe2.webp"
                 alt="Roe Portrait 2"
               />
