@@ -90,32 +90,16 @@ export default function AboutWindow({
     <div className="h-full overflow-y-auto bg-[#eef3fb] custom-scrollbar selection:bg-[#235cdb] selection:text-white">
       {/* Small subtle header */}
       <div className="px-12 pt-10 pb-6 border-b border-[#aca899]/20 bg-gradient-to-b from-white/30 to-transparent">
-        <div className="flex items-start justify-between gap-8">
-          <div>
-            <h1 className="text-4xl font-black text-[#10233f] tracking-tight">
-              Rohann Dizon
-            </h1>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="px-2 py-0.5 bg-[#4a7c2a] text-white text-[10px] font-bold rounded-sm uppercase tracking-tighter">
-                Online
-              </span>
-              <p className="text-sm text-[#10233f]/60 font-medium">
-                Full Stack Developer
-              </p>
-            </div>
-          </div>
-          <SystemInfoPanel
-            os="Windows"
-            kernel="WIN32_NT 10.0.268"
-            shell="PowerShell"
-            wm="Desktop Window Manager"
-            uptime="2 hours, 30 mins"
-            ip="192.168.1.3/24"
-            cpu="13th Gen Intel"
-            memory="13.10 / 15.7 GiB"
-            disk="195.12 / 200 GiB"
-            platform="OpenCode"
-          />
+        <h1 className="text-4xl font-black text-[#10233f] tracking-tight">
+          Rohann Dizon
+        </h1>
+        <div className="flex items-center gap-2 mt-2">
+          <span className="px-2 py-0.5 bg-[#4a7c2a] text-white text-[10px] font-bold rounded-sm uppercase tracking-tighter">
+            Online
+          </span>
+          <p className="text-sm text-[#10233f]/60 font-medium">
+            Full Stack Developer
+          </p>
         </div>
       </div>
 
@@ -218,6 +202,21 @@ export default function AboutWindow({
 
       {/* Continuous footer/spacer */}
       <div className="h-32 bg-gradient-to-t from-white/10 to-transparent" />
+
+      {/* System Info Panel */}
+      <div className="px-12 pb-8">
+        <SystemInfoPanel
+          os="Windows"
+          kernel="WIN32_NT 10.0.268"
+          shell="PowerShell"
+          wm="GlazeWM"
+          editor="Neovim"
+          terminal="Wezterm"
+          theme="Catppuccin Macchiato"
+          agents="Opencode + Customized Openspec"
+          disk="195.12 / 200 GiB"
+        />
+      </div>
     </div>
   );
 }
