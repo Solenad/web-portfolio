@@ -340,7 +340,7 @@ export default function Window({
               className="window-toolbar-button transition-hover"
             >
               <Image
-                src="/assets/xp-icons/folder-closed.webp"
+                src="/assets/xp-icons/github.webp"
                 alt=""
                 width={20}
                 height={20}
@@ -359,7 +359,7 @@ export default function Window({
               className="window-toolbar-button transition-hover"
             >
               <Image
-                src="/assets/xp-icons/user.webp"
+                src="/assets/xp-icons/linkedin.webp"
                 alt=""
                 width={20}
                 height={20}
