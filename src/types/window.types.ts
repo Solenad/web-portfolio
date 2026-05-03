@@ -52,7 +52,9 @@ export type ToolType =
   | "print"
   | "prevPage"
   | "nextPage"
-  | "pageIndicator";
+  | "pageIndicator"
+  | "github"
+  | "linkedin";
 
 export interface AddressBarConfig {
   path: string;

@@ -331,6 +331,44 @@ export default function Window({
               Page {Math.min(currentPage, pageCount)} of {pageCount}
             </span>
           );
+        case "github":
+          return (
+            <a
+              href="https://github.com/rohanndizon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="window-toolbar-button transition-hover"
+            >
+              <Image
+                src="/assets/xp-icons/folder-closed.webp"
+                alt=""
+                width={20}
+                height={20}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>GitHub</span>
+            </a>
+          );
+        case "linkedin":
+          return (
+            <a
+              href="https://linkedin.com/in/rohanndizon"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="window-toolbar-button transition-hover"
+            >
+              <Image
+                src="/assets/xp-icons/user.webp"
+                alt=""
+                width={20}
+                height={20}
+                className="window-toolbar-button-icon"
+                aria-hidden="true"
+              />
+              <span>LinkedIn</span>
+            </a>
+          );
         default:
           return <span />;
       }
@@ -364,9 +402,19 @@ export default function Window({
       const deltaX = event.clientX - dragState.startMouseX;
       const deltaY = event.clientY - dragState.startMouseY;
 
+      const rawX = dragState.startPosition.x + deltaX;
+      const rawY = dragState.startPosition.y + deltaY;
+
+      const minVisibleWidth = 100;
+      const clampedX = Math.max(
+        -(windowInstance.size.width - minVisibleWidth),
+        Math.min(rawX, window.innerWidth - minVisibleWidth),
+      );
+      const clampedY = Math.max(0, rawY);
+
       updateWindowPosition(windowInstance.id, {
-        x: dragState.startPosition.x + deltaX,
-        y: dragState.startPosition.y + deltaY,
+        x: clampedX,
+        y: clampedY,
       });
     };
 
@@ -388,6 +436,7 @@ export default function Window({
     updateWindowPosition,
     windowInstance.id,
     windowInstance.minimized,
+    windowInstance.size.width,
   ]);
 
   useEffect(() => {
@@ -459,18 +508,19 @@ export default function Window({
       // After restoring, position window so cursor is over the titlebar area
       const titlebarHeight = 28;
       const newWidth = windowInstance.previousRect.width;
-      const newHeight = windowInstance.previousRect.height;
 
       // Center the window horizontally on the cursor, keep vertically positioned
       // so cursor is on the titlebar (slightly above center)
       let newX = event.clientX - newWidth / 2;
       let newY = event.clientY - titlebarHeight / 2;
 
-      // Clamp to viewport bounds
-      const maxX = window.innerWidth - newWidth;
-      const maxY = window.innerHeight - newHeight;
-      newX = Math.max(0, Math.min(newX, maxX));
-      newY = Math.max(0, Math.min(newY, maxY));
+      // Clamp to viewport bounds (at least 100px visible)
+      const minVisibleWidth = 100;
+      newX = Math.max(
+        -(newWidth - minVisibleWidth),
+        Math.min(newX, window.innerWidth - minVisibleWidth),
+      );
+      newY = Math.max(0, newY);
 
       updateWindowPosition(windowInstance.id, { x: newX, y: newY });
 

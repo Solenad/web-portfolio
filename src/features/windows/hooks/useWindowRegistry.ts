@@ -29,17 +29,21 @@ const RESUME_ADDRESS_BAR: AddressBarConfig = {
   showGoButton: true,
 };
 
+const ABOUT_TOOLBAR_TOOLS: ToolType[] = ["linkedin", "github"];
+
 const WINDOW_REGISTRY: Record<WindowType, WindowRegistryEntry> = {
   about: {
     title: "About Me",
     iconName: "about",
     iconPath: "/assets/xp-icons/user.webp",
     component: AboutWindow,
-    defaultSize: { width: 600, height: 400 },
+    defaultSize: { width: 980, height: 700 },
     minSize: { width: 360, height: 260 },
     resizable: true,
-    hasToolbar: false,
+    hasToolbar: true,
     hasAddressBar: false,
+    toolbarTools: ABOUT_TOOLBAR_TOOLS,
+    enforceDefaultSizeOnOpen: true,
   },
   projects: {
     title: "Projects",
