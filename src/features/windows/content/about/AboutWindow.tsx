@@ -141,6 +141,9 @@ export default function AboutWindow({
               3rd Year Computer Science @ De La Salle University
             </p>
             <p className="text-[11px] text-[#10233f]/60">
+              Digital Transformation Intern @ Philip Morris International
+            </p>
+            <p className="text-[11px] text-[#10233f]/60">
               Software Developer Intern @ Siklab
             </p>
             <p className="text-[11px] text-[#10233f]/60">
