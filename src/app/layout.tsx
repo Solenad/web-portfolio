@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rohann Dizon | Portfolio",
+  title: "Rohann Gabriel D. Dizon Roe | Portfolio",
   description: "Windows XP-style portfolio showcasing full-stack development work",
 };
 
