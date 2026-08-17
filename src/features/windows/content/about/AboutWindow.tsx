@@ -124,7 +124,7 @@ export default function AboutWindow({
         <div className="flex items-start justify-between gap-8">
           <div>
             <h1 className="text-4xl font-black text-[#10233f] tracking-tight">
-              Rohann Dizon
+              Rohann Gabriel D. Dizon <span className="text-xl font-medium ml-1 text-[#4a7c2a]">Roe</span>
             </h1>
             <div className="flex items-center gap-2 mt-2">
               <span className="px-2 py-0.5 bg-[#4a7c2a] text-white text-[10px] font-bold rounded-sm uppercase tracking-tighter">
@@ -139,6 +139,9 @@ export default function AboutWindow({
             </p>
             <p className="text-[11px] text-[#10233f]/60 mt-0.5">
               3rd Year Computer Science @ De La Salle University
+            </p>
+            <p className="text-[11px] text-[#10233f]/60">
+              Digital Transformation Intern @ Philip Morris International
             </p>
             <p className="text-[11px] text-[#10233f]/60">
               Software Developer Intern @ Siklab

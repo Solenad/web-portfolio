@@ -53,7 +53,7 @@ export default function IconGrid({
       ),
     );
     const minRowsForWidth = Math.max(1, Math.ceil(icons.length / maxCols));
-    setRowCount(Math.max(heightRows, minRowsForWidth));
+    setRowCount(Math.min(Math.max(heightRows, minRowsForWidth), heightRows));
   }, [icons.length]);
 
   useEffect(() => {
