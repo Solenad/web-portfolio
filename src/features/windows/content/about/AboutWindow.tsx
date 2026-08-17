@@ -222,13 +222,17 @@ export default function AboutWindow({
             <div className="relative w-full max-w-sm grid grid-cols-2 gap-4 p-4">
               <Photo
                 variant="work"
-                label="Architecture"
+                label="PMFTC Intern"
                 className="w-full aspect-[4/5] rotate-[2deg]"
+                src="/assets/about-me/professional_roe.jpg"
+                alt="Roe at PMFTC Office"
               />
               <Photo
                 variant="work"
-                label="Development"
+                label="Team Collaboration"
                 className="w-full aspect-[4/5] rotate-[-2deg] mt-8"
+                src="/assets/about-me/pmftc-team.webp"
+                alt="Roe with team members"
               />
             </div>
           }
