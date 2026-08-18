@@ -238,11 +238,24 @@ export default function AboutWindow({
           }
         >
           <p>
-            [Placeholder: Career journey, key achievements, and professional
-            growth.]
+            I started off as a software developer for La Salle Computer
+            Society&apos;s Research and Development Committee, building apps that
+            service the org — including a website used by the entire DLSU,
+            catering over 30,000 students. After a year, I stepped up as Tech
+            Lead, guiding 22 student developers through 17 projects. I loved the
+            community we built, and I hope my committee learned from me just as I
+            learned from them.
           </p>
           <p className="mt-4">
-            [Current tech focus and professional aspirations.]
+            Not long afterwards, I took my first dips into the corporate world as
+            a Software Developer Intern at Siklab, shipping 4 websites with 4-6k
+            edge requests daily each. Then I joined Philip Morris Fortune Tobacco
+            Inc. in Taguig City as a Digital Transformation Intern, getting my
+            hands dirty with digitizing the company&apos;s processes.
+          </p>
+          <p className="mt-4">
+            Right now, I&apos;m still dipping myself into the corporate world
+            through internships. After I graduate, I hope to work immediately.
           </p>
         </AboutSection>
 
