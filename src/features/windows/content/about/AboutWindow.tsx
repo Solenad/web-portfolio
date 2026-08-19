@@ -16,6 +16,7 @@ interface PhotoProps {
 interface SelectedImage {
   src: string;
   alt: string;
+  caption: string;
 }
 
 function Photo({
@@ -24,8 +25,9 @@ function Photo({
   label,
   className = "",
   variant = "hobby",
+  caption,
   onClick,
-}: PhotoProps & { onClick?: (image: SelectedImage) => void }) {
+}: PhotoProps & { caption?: string; onClick?: (image: SelectedImage) => void }) {
   const frameClass =
     variant === "portrait"
       ? "winxp-raised border-4 border-white p-2 scale-110 z-10 shadow-xl hover:scale-120 transition-transform duration-300"
@@ -35,7 +37,11 @@ function Photo({
 
   const handleClick = (): void => {
     if (isInteractive && src !== undefined && onClick !== undefined) {
-      onClick({ src, alt: alt ?? label ?? "Image" });
+      onClick({
+        src,
+        alt: alt ?? label ?? "Image",
+        caption: caption ?? alt ?? label ?? "",
+      });
     }
   };
 
@@ -62,8 +68,8 @@ function Photo({
         </div>
       )}
       {isInteractive && (
-        <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/40 backdrop-blur-[2px]">
-          <span className="px-3 py-1 rounded-sm bg-[#ece9d8] text-[#10233f] text-xs font-bold border border-white shadow-[1px_1px_0_rgba(0,0,0,0.35)]">
+        <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/20 backdrop-blur-[1px]">
+          <span className="text-white text-xs font-bold drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">
             [ Click ]
           </span>
         </span>
@@ -239,6 +245,7 @@ export default function AboutWindow({
                   className="w-84 h-100 rotate-[-1deg]"
                   src="/assets/about-me/roe1.webp"
                   alt="Roe Portrait 1"
+                  caption=""
                   onClick={setSelectedImage}
                 />
                 <Photo
@@ -246,6 +253,7 @@ export default function AboutWindow({
                   className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[4deg] hidden md:flex z-20"
                   src="/assets/about-me/roe2.webp"
                   alt="Roe Portrait 2"
+                  caption=""
                   onClick={setSelectedImage}
                 />
               </div>
@@ -277,21 +285,20 @@ export default function AboutWindow({
             title="Professional Progress"
             reverse={true}
             imageContent={
-              <div className="relative w-full max-w-sm grid grid-cols-2 gap-4 p-4">
+              <div className="relative w-full max-w-sm flex items-center justify-center">
                 <Photo
                   variant="work"
                   label="PMFTC Intern"
-                  className="w-full aspect-[4/5] rotate-[2deg]"
+                  className="w-84 h-100 rotate-[2deg]"
                   src="/assets/about-me/professional_roe.jpg"
-                  alt="Roe at PMFTC Office"
+                  alt="@ PMFTC Office!"
                   onClick={setSelectedImage}
                 />
                 <Photo
                   variant="work"
-                  label="Team Collaboration"
-                  className="w-full aspect-[4/5] rotate-[-2deg] mt-8"
+                  className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[-4deg] hidden md:flex z-20"
                   src="/assets/about-me/pmftc-team.webp"
-                  alt="Roe with team members"
+                  alt="FTEs that helped me during my stint"
                   onClick={setSelectedImage}
                 />
               </div>
@@ -300,7 +307,7 @@ export default function AboutWindow({
             <p>
               I started off as a software developer for La Salle Computer
               Society&apos;s Research and Development Committee, building apps that
-              service the org — including a website used by the entire DLSU,
+              service the org, such as a website used by the entire DLSU,
               catering over 30,000 students. After a year, I stepped up as Tech
               Lead, guiding 22 student developers through 17 projects. I loved the
               community we built, and I hope my committee learned from me just as I
@@ -314,8 +321,10 @@ export default function AboutWindow({
               hands dirty with digitizing the company&apos;s processes.
             </p>
             <p className="mt-4">
-              Right now, I&apos;m done with my internships and ready to graduate.
-              After I graduate, I hope to work immediately.
+              Right now, I&apos;m doing internships until I graduate.
+              After I graduate, best case would be an immediate absorption. Then, as I progress
+              along that road, fulfill my dream of leading in the technology field.
+              Nothing is more fulfilling than achieving goals with people you inspire.
             </p>
           </AboutSection>
 
@@ -378,9 +387,11 @@ export default function AboutWindow({
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-6 px-1">
-              <span className="text-[11px] font-bold text-[#10233f] truncate">
-                {selectedImage.alt}
-              </span>
+              {selectedImage.caption !== "" && (
+                <span className="text-[11px] font-bold text-[#10233f] truncate">
+                  {selectedImage.caption}
+                </span>
+              )}
               <button
                 type="button"
                 onClick={() => setSelectedImage(null)}
