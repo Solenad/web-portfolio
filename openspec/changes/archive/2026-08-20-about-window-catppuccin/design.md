@@ -26,17 +26,13 @@ The goal: transform the About window content into a dark Catppuccin Macchiato "t
 Define Catppuccin Macchiato tokens as CSS custom properties on a single root class (e.g., `.about-catppuccin`) in `globals.css`, and reference them via Tailwind arbitrary values (e.g., `bg-[var(--ctp-base)]`). Alternative: hardcode hex in each component. Chosen for consistency, future window reuse, and easy JetBrains Mono/theme swap later.
 
 ### D2: Parallax via scroll listener + transform, not `background-attachment: fixed`
-The window scrolls in a nested container, so `fixed` attachment is unsupported (would fix to viewport, breaking the "inside the window only" rule). Instead: an absolutely-positioned, oversized image layer (e.g., height 120% of content, `object-cover`) inside the scroll container, translated via `transform: translateY(scrollTop * 0.2)` on a scroll listener attached to the scroll container ref. A `useRef` + direct style mutation (no re-render per scroll tick) keeps it cheap. Barely-there drift = 0.2 factor. Dimming = overlay div of `var(--ctp-base)` at ~55–65% opacity (moody midpoint between hidden and loud), plus a hint of blur for texture.
+The window scrolls in a nested container, so `fixed` attachment is unsupported (would fix to viewport, breaking the "inside the window only" rule). Instead: an absolutely-positioned, oversized image layer (height computed dynamically as `0.2 * clientHeight + 0.8 * scrollHeight`) inside the scroll container, translated via `transform: translateY(scrollTop * 0.2)` on a scroll listener attached to the scroll container ref. A `useRef` + direct style mutation (no re-render per scroll tick) keeps it cheap. Barely-there drift = 0.2 factor. Dimming = overlay div of Catppuccin base at **~75% opacity** (final value after user tuning — "slightly darker" than the original 60%), plus a hint of blur for texture.
 
 ### D3: Glass panels with backdrop-blur + translucent base
 Text containers (header + three section text boxes) become `backdrop-blur-md bg-[var(--ctp-base)]/70` panels with Catppuccin border (`overlay1`-ish at low opacity) and rounded corners. Alternative considered: solid `base` backgrounds (zero cost, no blur) — rejected because the user explicitly wants the trolley visible through glass. Note: `backdrop-filter` blurs everything behind the element, including the parallax layer — desired.
 
-### D4: fastfetch block replaces SystemInfoPanel
-Rewrite `SystemInfoPanel.tsx` as `FastfetchPanel` (or rename in place) rendering:
-- ASCII `roe@macchiato` banner in blue `#8aadf4` (with a catppuccin accent, e.g., mauve `#c6a0f6` eyes or green `#a6da95` details)
-- 9 info lines, fastfetch format: padded label in blue + `:` + value in `text` color, fixed-width via monospace + `whitespace-pre`/tabular layout
-- Same data values as today
-Fastfetch format chosen over neofetch-style block borders: cleaner in a narrow window and matches the "modern terminal" vibe.
+### D4: Terminal panels replace the system info panel
+The XP-style `SystemInfoPanel` was first rewritten as a fastfetch-style `FastfetchPanel` (ASCII `roe@macchiato` banner + colored info lines), then **removed entirely by user decision** — the About window ends with the footer gradient. In its place, a reusable `TerminalPanel` component was introduced: a macOS-style title bar (classic traffic-light dots red `#ed8796` / yellow `#eed49f` / green `#a6da95`, centered title) over a frosted glass body. Section titles moved from the old h3 headings into the panel title bars. Fastfetch format was chosen initially over neofetch-style block borders for a cleaner look in a narrow window; the mac title bar keeps that terminal aesthetic.
 
 ### D5: Font stack via a scoped utility class
 Add `.font-about-mono` (or reuse a modifier on the root container) in `globals.css`: `font-family: Consolas, ui-monospace, "Cascadia Mono", "Courier New", monospace;` applied once on the About root so all descendants inherit. Zero bundle cost; swapping to JetBrains Mono later = change one line. Alternative (next/font JetBrains_Mono) deferred per user.
@@ -45,7 +41,15 @@ Add `.font-about-mono` (or reuse a modifier on the root container) in `globals.c
 A `custom-scrollbar-dark` variant (or overriding `.custom-scrollbar` within `.about-catppuccin` scope) for the About scroll container. Modal rethemed with surface frames (`#404066`), light text, translucent dark backdrop — behavior unchanged.
 
 ### D7: Asset handling
-Copy `C:\Users\Lenovo\Downloads\trolley.jpg` → `public/assets/about-me/trolley.jpg` (existing about-me assets live there). Static import not required; direct `/assets/about-me/trolley.jpg` URL.
+Copy `C:\Users\Lenovo\Downloads\trolley.jpg` → `public/assets/about-me/trolley.jpg` and `C:\Users\Lenovo\Downloads\header.gif` → `public/assets/about-me/header.gif` (existing about-me assets live there). Direct `/assets/about-me/...` URLs.
+
+### D8: Final visual refinements (user-directed, post-spec)
+- Background dim raised from 60% → 75% ("slightly darker")
+- Header background: `header.gif` as a cover layer, `object-cover object-bottom` (bottom crop), darkened with `rgba(24,25,38,0.4)`
+- Header roles condensed to one `•`-separated line: "3rd Year CS @ DLSU • Digital Transformation Intern @ PMI • SWE Intern @ Siklab • Tech Lead R&D @ LSCS"
+- "Roe" nickname removed from the header name
+- Fastfetch panel removed; window ends with the footer gradient
+- Tuning constants live at the top of `AboutWindow.tsx`: `PARALLAX_FACTOR = 0.2`, `DIM_OPACITY = 0.75`
 
 ## Risks / Trade-offs
 
@@ -63,5 +67,5 @@ Copy `C:\Users\Lenovo\Downloads\trolley.jpg` → `public/assets/about-me/trolley
 
 ## Open Questions
 
-- Exact dim opacity and blur values will be tuned visually during implementation (no further user input needed; "moody midpoint" agreed).
-- Whether to rename SystemInfoPanel → FastfetchPanel or keep the filename with new internals — implementation detail, default: rename to `FastfetchPanel.tsx` for clarity.
+- Resolved: dim opacity and blur values tuned visually during implementation — final `DIM_OPACITY = 0.75`, glass `rgba(36,39,58,0.7)`, `PARALLAX_FACTOR = 0.2`.
+- Resolved: `SystemInfoPanel` was rewritten as `FastfetchPanel.tsx`, then both were removed by user decision; the reusable `TerminalPanel.tsx` carries the terminal aesthetic instead.
