@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
 import type { WindowContentProps } from "@/types/window.types";
-import FastfetchPanel from "./components/FastfetchPanel";
+import TerminalPanel from "./components/TerminalPanel";
 
 interface PhotoProps {
   src?: string;
@@ -20,7 +20,7 @@ interface SelectedImage {
 }
 
 const PARALLAX_FACTOR = 0.2;
-const DIM_OPACITY = 0.6;
+const DIM_OPACITY = 0.75;
 
 function Photo({
   src,
@@ -109,14 +109,8 @@ function AboutSection({
 
   return (
     <section className="flex gap-12 py-16 first:pt-8 last:pb-24">
-      <div className={`flex flex-col gap-6 ${textWidth} ${textOrder}`}>
-        <h3 className="text-2xl font-bold flex items-center gap-3 text-[var(--ctp-text)]">
-          <span className="w-3 h-3 rounded-sm bg-[var(--ctp-blue)] rotate-45 shadow-[0_0_8px_rgba(138,173,244,0.55)]" />
-          {title}
-        </h3>
-        <div className="bg-[rgba(36,39,58,0.7)] backdrop-blur-md border border-[rgba(73,77,100,0.6)] rounded-lg p-8 leading-relaxed text-[var(--ctp-text)] shadow-[0_4px_24px_rgba(0,0,0,0.35)]">
-          {children}
-        </div>
+      <div className={`flex flex-col ${textWidth} ${textOrder}`}>
+        <TerminalPanel title={title}>{children}</TerminalPanel>
       </div>
       <div
         className={`flex items-center justify-center ${imageWidth} ${imageOrder}`}
@@ -244,11 +238,22 @@ export default function AboutWindow({
 
         <div className="relative z-10">
           {/* Small subtle header */}
-          <div className="px-12 pt-10 pb-6 border-b border-[rgba(73,77,100,0.5)] bg-[rgba(30,32,48,0.7)] backdrop-blur-md">
-            <div className="flex items-start justify-between gap-8">
+          <div className="relative px-12 pt-10 pb-6 border-b border-[rgba(73,77,100,0.5)] bg-[rgba(30,32,48,0.7)] backdrop-blur-md overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none">
+              <img
+                src="/assets/about-me/header.gif"
+                alt=""
+                className="w-full h-full object-cover object-bottom"
+              />
+              <div
+                className="absolute inset-0"
+                style={{ backgroundColor: "rgba(24, 25, 38, 0.4)" }}
+              />
+            </div>
+            <div className="relative z-10 flex items-start justify-between gap-8">
               <div>
                 <h1 className="text-4xl font-black text-[var(--ctp-text)] tracking-tight">
-                  Rohann Gabriel D. Dizon <span className="text-xl font-medium ml-1 text-[var(--ctp-green)]">Roe</span>
+                  Rohann Gabriel D. Dizon
                 </h1>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="px-2 py-0.5 bg-[var(--ctp-green)] text-[var(--ctp-base)] text-[10px] font-bold rounded-sm uppercase tracking-tighter">
@@ -261,18 +266,15 @@ export default function AboutWindow({
                 <p className="text-[11px] italic text-[var(--ctp-overlay1)] mt-1">
                   Manila, Philippines
                 </p>
-                <p className="text-[11px] text-[var(--ctp-overlay1)] mt-0.5">
-                  3rd Year Computer Science @ De La Salle University
-                </p>
-                <p className="text-[11px] text-[var(--ctp-overlay1)]">
-                  Digital Transformation Intern @ Philip Morris International
-                </p>
-                <p className="text-[11px] text-[var(--ctp-overlay1)]">
-                  Software Developer Intern @ Siklab
-                </p>
-                <p className="text-[11px] text-[var(--ctp-overlay1)]">
-                  Tech Lead of Research and Development @ La Salle Computer Society
-                </p>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[var(--ctp-overlay1)] mt-0.5">
+                  <span>3rd Year CS @ DLSU</span>
+                  <span className="text-[var(--ctp-surface2)]" aria-hidden="true">•</span>
+                  <span>Digital Transformation Intern @ PMI</span>
+                  <span className="text-[var(--ctp-surface2)]" aria-hidden="true">•</span>
+                  <span>SWE Intern @ Siklab</span>
+                  <span className="text-[var(--ctp-surface2)]" aria-hidden="true">•</span>
+                  <span>Tech Lead R&amp;D @ LSCS</span>
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2 flex-shrink-0">
                 {techBadges.map((badge) => (
@@ -420,21 +422,6 @@ export default function AboutWindow({
 
           {/* Continuous footer/spacer */}
           <div className="h-32 bg-gradient-to-t from-[rgba(36,39,58,0.5)] to-transparent" />
-
-          {/* Fastfetch System Info */}
-          <div className="px-12 pb-8">
-            <FastfetchPanel
-              os="Windows"
-              kernel="WIN32_NT 10.0.268"
-              shell="PowerShell"
-              wm="GlazeWM"
-              editor="Neovim"
-              terminal="Wezterm"
-              theme="Catppuccin Macchiato"
-              agents="Opencode + Customized Openspec"
-              disk="195.12 / 200 GiB"
-            />
-          </div>
         </div>
       </div>
 
