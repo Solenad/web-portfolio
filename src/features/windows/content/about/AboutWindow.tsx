@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { JSX } from "react";
 import type { WindowContentProps } from "@/types/window.types";
-import SystemInfoPanel from "./components/SystemInfoPanel";
+import FastfetchPanel from "./components/FastfetchPanel";
 
 interface PhotoProps {
   src?: string;
@@ -18,6 +18,9 @@ interface SelectedImage {
   alt: string;
   caption: string;
 }
+
+const PARALLAX_FACTOR = 0.2;
+const DIM_OPACITY = 0.6;
 
 function Photo({
   src,
@@ -63,7 +66,7 @@ function Photo({
       {src ? (
         <img src={src} alt={alt || ""} className="w-full h-full object-cover" />
       ) : (
-        <div className="w-full h-full flex items-center justify-center italic text-[#10233f]/40 text-center p-2 text-[10px]">
+        <div className="w-full h-full flex items-center justify-center italic text-[rgba(110,115,141,0.8)] text-center p-2 text-[10px]">
           {variant.toUpperCase()} PHOTO
         </div>
       )}
@@ -75,7 +78,7 @@ function Photo({
         </span>
       )}
       {label && (
-        <span className="mt-1 text-[9px] font-medium text-[#10233f]/60 uppercase tracking-wider">
+        <span className="mt-1 text-[9px] font-medium text-[rgba(128,135,162,0.9)] uppercase tracking-wider">
           {label}
         </span>
       )}
@@ -107,11 +110,11 @@ function AboutSection({
   return (
     <section className="flex gap-12 py-16 first:pt-8 last:pb-24">
       <div className={`flex flex-col gap-6 ${textWidth} ${textOrder}`}>
-        <h3 className="text-2xl font-bold flex items-center gap-3 text-[#10233f]">
-          <span className="w-3 h-3 rounded-sm bg-[#235cdb] rotate-45 shadow-[1px_1px_0_rgba(0,0,0,0.2)]" />
+        <h3 className="text-2xl font-bold flex items-center gap-3 text-[var(--ctp-text)]">
+          <span className="w-3 h-3 rounded-sm bg-[var(--ctp-blue)] rotate-45 shadow-[0_0_8px_rgba(138,173,244,0.55)]" />
           {title}
         </h3>
-        <div className="winxp-inset bg-[#eef3fb] p-8 rounded-sm leading-relaxed text-[#10233f] shadow-inner backdrop-blur-sm">
+        <div className="bg-[rgba(36,39,58,0.7)] backdrop-blur-md border border-[rgba(73,77,100,0.6)] rounded-lg p-8 leading-relaxed text-[var(--ctp-text)] shadow-[0_4px_24px_rgba(0,0,0,0.35)]">
           {children}
         </div>
       </div>
@@ -126,7 +129,7 @@ function AboutSection({
 
 const techBadges = [
   { icon: "⚛", label: "React", url: "https://react.dev", color: "#2D9CD9" },
-  { icon: "▲", label: "Next.js", url: "https://nextjs.org", color: "#000000" },
+  { icon: "▲", label: "Next.js", url: "https://nextjs.org", color: "#b7bdf8" },
   {
     icon: "TS",
     label: "TypeScript",
@@ -159,6 +162,8 @@ export default function AboutWindow({
   isMobile,
 }: WindowContentProps): JSX.Element {
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (selectedImage === null) {
@@ -177,231 +182,290 @@ export default function AboutWindow({
     };
   }, [selectedImage]);
 
+  useEffect(() => {
+    const container = scrollRef.current;
+    const layer = parallaxRef.current;
+    if (container === null || layer === null) {
+      return;
+    }
+
+    const applyLayerGeometry = (): void => {
+      layer.style.height = `${
+        PARALLAX_FACTOR * container.clientHeight +
+        (1 - PARALLAX_FACTOR) * container.scrollHeight
+      }px`;
+    };
+
+    let rafId = 0;
+    const handleScroll = (): void => {
+      if (rafId !== 0) {
+        return;
+      }
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        layer.style.transform = `translateY(${container.scrollTop * PARALLAX_FACTOR}px)`;
+      });
+    };
+
+    applyLayerGeometry();
+    window.addEventListener("resize", applyLayerGeometry);
+    container.addEventListener("scroll", handleScroll, { passive: true });
+
+    return (): void => {
+      window.removeEventListener("resize", applyLayerGeometry);
+      container.removeEventListener("scroll", handleScroll);
+      if (rafId !== 0) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
+
   return (
-    <div className="h-full relative flex flex-col bg-[#eef3fb] selection:bg-[#235cdb] selection:text-white">
-      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
-        {/* Small subtle header */}
-        <div className="px-12 pt-10 pb-6 border-b border-[#aca899]/20 bg-gradient-to-b from-white/30 to-transparent">
-          <div className="flex items-start justify-between gap-8">
-            <div>
-              <h1 className="text-4xl font-black text-[#10233f] tracking-tight">
-                Rohann Gabriel D. Dizon <span className="text-xl font-medium ml-1 text-[#4a7c2a]">Roe</span>
-              </h1>
-              <div className="flex items-center gap-2 mt-2">
-                <span className="px-2 py-0.5 bg-[#4a7c2a] text-white text-[10px] font-bold rounded-sm uppercase tracking-tighter">
-                  Online
-                </span>
-                <p className="text-sm text-[#10233f]/60 font-medium">
-                  Full Stack Developer
+    <div className="about-catppuccin font-about-mono h-full relative flex flex-col bg-[var(--ctp-base)] selection:bg-[rgba(138,173,244,0.3)] selection:text-[var(--ctp-text)]">
+      <div
+        ref={scrollRef}
+        className="flex-1 min-h-0 overflow-y-auto custom-scrollbar relative"
+      >
+        {/* Parallax background layer */}
+        <div
+          ref={parallaxRef}
+          className="absolute top-0 inset-x-0 pointer-events-none will-change-transform"
+        >
+          <img
+            src="/assets/about-me/trolley.jpg"
+            alt=""
+            className="w-full h-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{ backgroundColor: `rgba(36, 39, 58, ${DIM_OPACITY})` }}
+          />
+        </div>
+
+        <div className="relative z-10">
+          {/* Small subtle header */}
+          <div className="px-12 pt-10 pb-6 border-b border-[rgba(73,77,100,0.5)] bg-[rgba(30,32,48,0.7)] backdrop-blur-md">
+            <div className="flex items-start justify-between gap-8">
+              <div>
+                <h1 className="text-4xl font-black text-[var(--ctp-text)] tracking-tight">
+                  Rohann Gabriel D. Dizon <span className="text-xl font-medium ml-1 text-[var(--ctp-green)]">Roe</span>
+                </h1>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="px-2 py-0.5 bg-[var(--ctp-green)] text-[var(--ctp-base)] text-[10px] font-bold rounded-sm uppercase tracking-tighter">
+                    Online
+                  </span>
+                  <p className="text-sm text-[var(--ctp-subtext0)] font-medium">
+                    Full Stack Developer
+                  </p>
+                </div>
+                <p className="text-[11px] italic text-[var(--ctp-overlay1)] mt-1">
+                  Manila, Philippines
+                </p>
+                <p className="text-[11px] text-[var(--ctp-overlay1)] mt-0.5">
+                  3rd Year Computer Science @ De La Salle University
+                </p>
+                <p className="text-[11px] text-[var(--ctp-overlay1)]">
+                  Digital Transformation Intern @ Philip Morris International
+                </p>
+                <p className="text-[11px] text-[var(--ctp-overlay1)]">
+                  Software Developer Intern @ Siklab
+                </p>
+                <p className="text-[11px] text-[var(--ctp-overlay1)]">
+                  Tech Lead of Research and Development @ La Salle Computer Society
                 </p>
               </div>
-              <p className="text-[11px] italic text-[#10233f]/50 mt-1">
-                Manila, Philippines
-              </p>
-              <p className="text-[11px] text-[#10233f]/60 mt-0.5">
-                3rd Year Computer Science @ De La Salle University
-              </p>
-              <p className="text-[11px] text-[#10233f]/60">
-                Digital Transformation Intern @ Philip Morris International
-              </p>
-              <p className="text-[11px] text-[#10233f]/60">
-                Software Developer Intern @ Siklab
-              </p>
-              <p className="text-[11px] text-[#10233f]/60">
-                Tech Lead of Research and Development @ La Salle Computer Society
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-2 flex-shrink-0">
-              {techBadges.map((badge) => (
-                <a
-                  key={badge.label}
-                  href={badge.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-sm border text-[11px] font-semibold transition-transform duration-150 hover:scale-110 whitespace-nowrap"
-                  style={{
-                    borderColor: badge.color,
-                    color: badge.color,
-                    backgroundColor: hexToRgba(badge.color, 0.1),
-                  }}
-                >
-                  <span>{badge.icon}</span>
-                  <span>{badge.label}</span>
-                </a>
-              ))}
+              <div className="grid grid-cols-2 gap-2 flex-shrink-0">
+                {techBadges.map((badge) => (
+                  <a
+                    key={badge.label}
+                    href={badge.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-sm border text-[11px] font-semibold transition-transform duration-150 hover:scale-110 whitespace-nowrap"
+                    style={{
+                      borderColor: badge.color,
+                      color: badge.color,
+                      backgroundColor: hexToRgba(badge.color, 0.15),
+                    }}
+                  >
+                    <span>{badge.icon}</span>
+                    <span>{badge.label}</span>
+                  </a>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="max-w-5xl mx-auto px-12">
-          {/* Section 1: About Me */}
-          <AboutSection
-            title="About Me"
-            imageWide={true}
-            imageContent={
-              <div className="relative w-full max-w-sm flex items-center justify-center">
-                <Photo
-                  variant="portrait"
-                  className="w-84 h-100 rotate-[-1deg]"
-                  src="/assets/about-me/roe1.webp"
-                  alt="Roe Portrait 1"
-                  caption=""
-                  onClick={setSelectedImage}
-                />
-                <Photo
-                  variant="hobby"
-                  className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[4deg] hidden md:flex z-20"
-                  src="/assets/about-me/roe2.webp"
-                  alt="Roe Portrait 2"
-                  caption=""
-                  onClick={setSelectedImage}
-                />
-              </div>
-            }
-          >
-            <p>
-              Hi! I&apos;m <span className="font-bold">Roe</span>, a 3rd year
-              computer science undergraduate in DLSU. I&apos;ve completed
-              internships as a Software Developer Intern at Siklab and as a
-              Digital Transformation Intern at Philip Morris International, and
-              I&apos;ve retired as the Tech Lead for R&amp;D in La Salle
-              Computer Society.
-            </p>
-            <p className="mt-3 ">
-              I do love programming. The mere act of producing wonders akin to
-              magic just through lines of code pleases me. On top of that, the
-              satisfaction from an accomplished project or a solved problem is
-              dopamine for me. That&apos;s why I think that I&apos;ll be
-              developing applications for as long as I live.
-            </p>
+          <div className="max-w-5xl mx-auto px-12">
+            {/* Section 1: About Me */}
+            <AboutSection
+              title="About Me"
+              imageWide={true}
+              imageContent={
+                <div className="relative w-full max-w-sm flex items-center justify-center">
+                  <Photo
+                    variant="portrait"
+                    className="w-84 h-100 rotate-[-1deg]"
+                    src="/assets/about-me/roe1.webp"
+                    alt="Roe Portrait 1"
+                    caption=""
+                    onClick={setSelectedImage}
+                  />
+                  <Photo
+                    variant="hobby"
+                    className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[4deg] hidden md:flex z-20"
+                    src="/assets/about-me/roe2.webp"
+                    alt="Roe Portrait 2"
+                    caption=""
+                    onClick={setSelectedImage}
+                  />
+                </div>
+              }
+            >
+              <p>
+                Hi! I&apos;m <span className="font-bold">Roe</span>, a 3rd year
+                computer science undergraduate in DLSU. I&apos;ve completed
+                internships as a Software Developer Intern at Siklab and as a
+                Digital Transformation Intern at Philip Morris International, and
+                I&apos;ve retired as the Tech Lead for R&amp;D in La Salle
+                Computer Society.
+              </p>
+              <p className="mt-3 ">
+                I do love programming. The mere act of producing wonders akin to
+                magic just through lines of code pleases me. On top of that, the
+                satisfaction from an accomplished project or a solved problem is
+                dopamine for me. That&apos;s why I think that I&apos;ll be
+                developing applications for as long as I live.
+              </p>
 
-            <p className="mt-3 text-[#10233f]/80 italic">
-              PS. Thanks for sticking around my website!
-            </p>
-          </AboutSection>
+              <p className="mt-3 text-[var(--ctp-subtext0)] italic">
+                PS. Thanks for sticking around my website!
+              </p>
+            </AboutSection>
 
-          {/* Section 2: Professional Progress */}
-          <AboutSection
-            title="Professional Progress"
-            reverse={true}
-            imageContent={
-              <div className="relative w-full max-w-sm flex items-center justify-center">
-                <Photo
-                  variant="work"
-                  label="PMFTC Intern"
-                  className="w-84 h-100 rotate-[2deg]"
-                  src="/assets/about-me/professional_roe.jpg"
-                  alt="@ PMFTC Office!"
-                  onClick={setSelectedImage}
-                />
-                <Photo
-                  variant="work"
-                  className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[-4deg] hidden md:flex z-20"
-                  src="/assets/about-me/pmftc-team.webp"
-                  alt="FTEs that helped me during my stint"
-                  onClick={setSelectedImage}
-                />
-              </div>
-            }
-          >
-            <p>
-              I started off as a software developer for La Salle Computer
-              Society&apos;s Research and Development Committee, building apps that
-              service the org, such as a website used by the entire DLSU,
-              catering over 30,000 students. After a year, I stepped up as Tech
-              Lead, guiding 22 student developers through 17 projects. I loved the
-              community we built, and I hope my committee learned from me just as I
-              learned from them.
-            </p>
-            <p className="mt-4">
-              Not long afterwards, I took my first dips into the corporate world as
-              a Software Developer Intern at Siklab, shipping 4 websites with 4-6k
-              edge requests daily each. Then I joined Philip Morris Fortune Tobacco
-              Inc. in Taguig City as a Digital Transformation Intern, getting my
-              hands dirty with digitizing the company&apos;s processes.
-            </p>
-            <p className="mt-4">
-              Right now, I&apos;m doing internships until I graduate.
-              After I graduate, best case would be an immediate absorption. Then, as I progress
-              along that road, fulfill my dream of leading in the technology field.
-              Nothing is more fulfilling than achieving goals with people you inspire.
-            </p>
-          </AboutSection>
+            {/* Section 2: Professional Progress */}
+            <AboutSection
+              title="Professional Progress"
+              reverse={true}
+              imageContent={
+                <div className="relative w-full max-w-sm flex items-center justify-center">
+                  <Photo
+                    variant="work"
+                    label="PMFTC Intern"
+                    className="w-84 h-100 rotate-[2deg]"
+                    src="/assets/about-me/professional_roe.jpg"
+                    alt="@ PMFTC Office!"
+                    onClick={setSelectedImage}
+                  />
+                  <Photo
+                    variant="work"
+                    className="absolute -bottom-10 -right-10 w-40 h-40 rotate-[-4deg] hidden md:flex z-20"
+                    src="/assets/about-me/pmftc-team.webp"
+                    alt="FTEs that helped me during my stint"
+                    onClick={setSelectedImage}
+                  />
+                </div>
+              }
+            >
+              <p>
+                I started off as a software developer for La Salle Computer
+                Society&apos;s Research and Development Committee, building apps that
+                service the org, such as a website used by the entire DLSU,
+                catering over 30,000 students. After a year, I stepped up as Tech
+                Lead, guiding 22 student developers through 17 projects. I loved the
+                community we built, and I hope my committee learned from me just as I
+                learned from them.
+              </p>
+              <p className="mt-4">
+                Not long afterwards, I took my first dips into the corporate world as
+                a Software Developer Intern at Siklab, shipping 4 websites with 4-6k
+                edge requests daily each. Then I joined Philip Morris Fortune Tobacco
+                Inc. in Taguig City as a Digital Transformation Intern, getting my
+                hands dirty with digitizing the company&apos;s processes.
+              </p>
+              <p className="mt-4">
+                Right now, I&apos;m doing internships until I graduate.
+                After I graduate, best case would be an immediate absorption. Then, as I progress
+                along that road, fulfill my dream of leading in the technology field.
+                Nothing is more fulfilling than achieving goals with people you inspire.
+              </p>
+            </AboutSection>
 
-          {/* Section 3: Interests & Hobbies */}
-          <AboutSection
-            title="Interests & Hobbies"
-            imageWide={true}
-            imageContent={
-              <div className="relative w-full max-w-sm flex flex-wrap gap-4 justify-center items-center">
-                <Photo variant="hobby" className="w-40 h-40 rotate-[-3deg]" />
-                <Photo
-                  variant="hobby"
-                  className="w-36 h-36 rotate-[2deg] -mt-4"
-                />
-                <Photo
-                  variant="hobby"
-                  className="absolute -bottom-8 left-4 w-28 h-28 rotate-[6deg] opacity-60 hidden lg:flex"
-                />
-              </div>
-            }
-          >
-            <p>
-              [Placeholder: Personal interests, hobbies, and what I do for fun.]
-            </p>
-            <p className="mt-4 text-[#10233f]/70">
-              [Anything else that makes me, me.]
-            </p>
-          </AboutSection>
-        </div>
+            {/* Section 3: Interests & Hobbies */}
+            <AboutSection
+              title="Interests & Hobbies"
+              imageWide={true}
+              imageContent={
+                <div className="relative w-full max-w-sm flex flex-wrap gap-4 justify-center items-center">
+                  <Photo variant="hobby" className="w-40 h-40 rotate-[-3deg]" />
+                  <Photo
+                    variant="hobby"
+                    className="w-36 h-36 rotate-[2deg] -mt-4"
+                  />
+                  <Photo
+                    variant="hobby"
+                    className="absolute -bottom-8 left-4 w-28 h-28 rotate-[6deg] opacity-60 hidden lg:flex"
+                  />
+                </div>
+              }
+            >
+              <p>
+                [Placeholder: Personal interests, hobbies, and what I do for fun.]
+              </p>
+              <p className="mt-4 text-[var(--ctp-subtext0)]">
+                [Anything else that makes me, me.]
+              </p>
+            </AboutSection>
+          </div>
 
-        {/* Continuous footer/spacer */}
-        <div className="h-32 bg-gradient-to-t from-white/10 to-transparent" />
+          {/* Continuous footer/spacer */}
+          <div className="h-32 bg-gradient-to-t from-[rgba(36,39,58,0.5)] to-transparent" />
 
-        {/* System Info Panel */}
-        <div className="px-12 pb-8">
-          <SystemInfoPanel
-            os="Windows"
-            kernel="WIN32_NT 10.0.268"
-            shell="PowerShell"
-            wm="GlazeWM"
-            editor="Neovim"
-            terminal="Wezterm"
-            theme="Catppuccin Macchiato"
-            agents="Opencode + Customized Openspec"
-            disk="195.12 / 200 GiB"
-          />
+          {/* Fastfetch System Info */}
+          <div className="px-12 pb-8">
+            <FastfetchPanel
+              os="Windows"
+              kernel="WIN32_NT 10.0.268"
+              shell="PowerShell"
+              wm="GlazeWM"
+              editor="Neovim"
+              terminal="Wezterm"
+              theme="Catppuccin Macchiato"
+              agents="Opencode + Customized Openspec"
+              disk="195.12 / 200 GiB"
+            />
+          </div>
         </div>
       </div>
 
       {selectedImage !== null && (
         <div
-          className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-[2px]"
+          className="absolute inset-0 z-50 flex items-center justify-center bg-[rgba(24,25,38,0.85)] backdrop-blur-md"
           onClick={() => setSelectedImage(null)}
           role="dialog"
           aria-modal="true"
           aria-label={`${selectedImage.alt} preview`}
         >
           <div
-            className="winxp-raised bg-[#ece9d8] p-2 max-w-[92%] max-h-[92%] flex flex-col gap-2 shadow-2xl overflow-hidden"
+            className="bg-[var(--ctp-surface0)] border border-[var(--ctp-surface2)] rounded-md p-2 max-w-[92%] max-h-[92%] flex flex-col gap-2 shadow-2xl overflow-hidden"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-6 px-1">
               {selectedImage.caption !== "" && (
-                <span className="text-[11px] font-bold text-[#10233f] truncate">
+                <span className="text-[11px] font-bold text-[var(--ctp-text)] truncate">
                   {selectedImage.caption}
                 </span>
               )}
               <button
                 type="button"
                 onClick={() => setSelectedImage(null)}
-                className="px-2 py-0.5 rounded-sm bg-[#ece9d8] border border-[#aca899] text-[11px] font-bold text-[#10233f] shadow-[1px_1px_0_rgba(0,0,0,0.2)] hover:bg-[#f7f7f2] transition-colors"
+                className="px-2 py-0.5 rounded-sm bg-[var(--ctp-surface1)] border border-[var(--ctp-overlay0)] text-[11px] font-bold text-[var(--ctp-text)] shadow-[1px_1px_0_rgba(0,0,0,0.3)] hover:bg-[var(--ctp-surface2)] transition-colors"
                 aria-label="Close image preview"
               >
                 ✕
               </button>
             </div>
-            <div className="winxp-inset bg-white overflow-auto">
+            <div className="bg-[var(--ctp-base)] border border-[var(--ctp-surface2)] rounded-sm overflow-auto">
               <img
                 src={selectedImage.src}
                 alt={selectedImage.alt}
