@@ -446,7 +446,7 @@ export default function AboutWindow({
               <button
                 type="button"
                 onClick={() => setSelectedImage(null)}
-                className="px-2 py-0.5 rounded-sm bg-[var(--ctp-surface1)] border border-[var(--ctp-overlay0)] text-[11px] font-bold text-[var(--ctp-text)] shadow-[1px_1px_0_rgba(0,0,0,0.3)] hover:bg-[var(--ctp-surface2)] transition-colors"
+                className="ml-auto px-2 py-0.5 rounded-sm bg-[var(--ctp-surface1)] border border-[var(--ctp-overlay0)] text-[11px] font-bold text-[var(--ctp-text)] shadow-[1px_1px_0_rgba(0,0,0,0.3)] hover:bg-[var(--ctp-surface2)] transition-colors"
                 aria-label="Close image preview"
               >
                 ✕
