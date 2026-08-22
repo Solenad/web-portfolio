@@ -13,7 +13,7 @@ RUN npm run build
 FROM base AS runner
 ENV NODE_ENV=production
 
-RUN apk add --no-cache wget
+RUN apk add --no-cache wget=1.25.0-r0
 
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 
